@@ -8,7 +8,7 @@ const mainRouter = {
   element: LayoutPage,
   children: [
     {
-      subPath: "*", 
+      subPath: "", 
       Component: Main ,
     },
     {

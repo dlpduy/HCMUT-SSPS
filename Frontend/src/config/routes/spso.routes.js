@@ -30,7 +30,7 @@ const spsoRouter = {
         Component: BuyPaperHistory,
       },
       {
-        subPath: "*", 
+        subPath: "", 
         Component: Dashboard,
       },
     ]}

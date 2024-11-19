@@ -30,7 +30,7 @@ function App() {
           return (
             <Route path={router.path} key={index} element={<router.element />}>
               {router.children.map((children, index) => {
-                return <Route path={children.path} element={<children.Component />} key={index} />;
+                return <Route path={children.subPath} element={<children.Component />} key={index} />;
               })}
             </Route>
           );

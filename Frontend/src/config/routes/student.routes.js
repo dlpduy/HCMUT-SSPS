@@ -30,7 +30,7 @@ const studentRouter ={
         Component: PrintingHistory,
       },
       {
-        subPath: "*", 
+        subPath: "", 
         Component: BuyPaper,
       },
     ]}
