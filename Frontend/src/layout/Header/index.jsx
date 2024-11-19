@@ -1,4 +1,4 @@
-import { useNavigate, Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { Button } from "antd";
 import logo from "../../assets/img/logo.png";
@@ -58,9 +58,10 @@ const HeaderItems = (role) => {
 };
 
 const HeaderPage = () => {
+  const navigate = useNavigate();
   return (
     <div className="w-full h-full flex flex-row items-center">
-      <img className="h-14" src={logo} alt="" />
+      <img className="h-14 cursor-pointer" src={logo} alt="" onClick={() => navigate("/login", { replace: true })} />
       <HeaderItems role={""} />
       {role ? <div className="">{role}</div> : <Button className="h-12 w-32 text-white bg-[#2600FF] text-lg font-bold">Đăng nhập</Button>}
     </div>
