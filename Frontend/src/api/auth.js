@@ -1,4 +1,4 @@
-import { methods } from '../config/methods.config'
+import { methods } from '../config/api/methods.config'
 
 // const url = "/signin"
 // const auth = {
