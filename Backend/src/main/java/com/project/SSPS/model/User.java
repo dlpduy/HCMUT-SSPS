@@ -1,34 +1,27 @@
 package com.project.SSPS.model;
 
+import lombok.Getter;
+import lombok.Setter;
 
-import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
-import java.util.Collection;
-import java.util.List;
-
+@Entity
+@Table(name = "users")
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-@FieldDefaults(level = AccessLevel.PRIVATE)
-@Entity
-@Table(name = "user")
-
-public class User {
+public class User extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column(unique = true, nullable = false)
-    String username;
-    String email;
-    String password;
-
-    @Enumerated(EnumType.STRING)
-    Role role;
+    private String fullName;
+    private String email;
+    private String password;
+    private String address;
+    private String phoneNumber;
+    private String role;
 }
