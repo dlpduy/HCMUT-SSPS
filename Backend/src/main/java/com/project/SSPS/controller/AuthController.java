@@ -95,7 +95,7 @@ public class AuthController {
                                 ? SecurityUtil.getCurrentUserLogin().get()
                                 : "";
                 if (username.isEmpty()) {
-                        throw new InvalidException("User is not authenticated");
+                        throw new InvalidException("User is not logged in");
                 }
                 return ResponseEntity.ok()
                                 .header(HttpHeaders.AUTHORIZATION, "")
