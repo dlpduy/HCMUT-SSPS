@@ -34,21 +34,22 @@ public class AuthController {
 
         private final PasswordEncoder passwordEncoder;
         private final UserService userService;
-        private final SecurityUtil securityUtil;
         private final AuthenticationManagerBuilder authenticationManagerBuilder;
         private final JwtService jwtService;
 
-        public AuthController(PasswordEncoder passwordEncoder, UserService userService, SecurityUtil securityUtil,
+        public AuthController(PasswordEncoder passwordEncoder, UserService userService,
                         AuthenticationManagerBuilder authenticationManagerBuilder, JwtService jwtService) {
                 this.passwordEncoder = passwordEncoder;
                 this.userService = userService;
-                this.securityUtil = securityUtil;
                 this.authenticationManagerBuilder = authenticationManagerBuilder;
                 this.jwtService = jwtService;
         }
 
         @PostMapping("/register")
-        public ResponseEntity<UserResponse> register(@RequestBody RegisterDTO registerDTO) {
+        public ResponseEntity<UserResponse> register(@RequestBody RegisterDTO registerDTO) throws InvalidException {
+                if (this.userService.checkUserExists(registerDTO.getUsername())) {
+                        throw new InvalidException("Username is already taken");
+                }
                 String hashPassword = this.passwordEncoder.encode(registerDTO.getPassword());
                 User newUser = new User();
                 newUser.setFullName(registerDTO.getFullName());
@@ -84,6 +85,7 @@ public class AuthController {
                 return ResponseEntity.ok()
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + access_token)
                                 .body(resLoginDTO);
+
         }
 
         @PostMapping("/logout")
