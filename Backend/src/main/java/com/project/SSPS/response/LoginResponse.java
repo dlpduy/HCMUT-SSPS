@@ -1,10 +1,14 @@
 package com.project.SSPS.response;
 
+import com.project.SSPS.model.Role;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class LoginResponse {
     private String accessToken;
     private UserLogin user;
@@ -14,8 +18,8 @@ public class LoginResponse {
     @NoArgsConstructor
     public static class UserLogin {
         private long id;
-        private String email;
+        private String username;
         private String name;
-        private String role;
+        private Role role;
     }
 }
