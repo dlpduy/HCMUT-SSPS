@@ -23,12 +23,12 @@ public class UserService {
         return this.userRepository.save(user);
     }
 
-    public User getUserByEmail(String email) {
-        return this.userRepository.findByEmail(email);
+    public User getUserbyUsername(String username) {
+        return this.userRepository.findByUsername(username).orElse(null);
     }
 
-    public boolean checkUserExists(String email) {
-        return this.userRepository.existsByEmail(email);
+    public boolean checkUserExists(String username) {
+        return this.userRepository.existsByUsername(username);
     }
 
     public User findById(Long userId) {
