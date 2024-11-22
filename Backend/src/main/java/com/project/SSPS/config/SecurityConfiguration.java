@@ -45,6 +45,11 @@ public class SecurityConfiguration {
                 // .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(
                         authz -> authz
+                                .requestMatchers("/student").hasAuthority("ROLE_STUDENT")
+                                .requestMatchers("/spso").hasAuthority("ROLE_SPSO")
+                                .requestMatchers(HttpMethod.POST, "api/v1/auth/register").permitAll()
+                                .requestMatchers(HttpMethod.POST, "api/v1/auth/login").permitAll()
+
                                 .anyRequest().permitAll())
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults())
                         .authenticationEntryPoint(customAuthenticationEntryPoint))

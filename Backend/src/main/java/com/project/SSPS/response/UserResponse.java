@@ -1,5 +1,7 @@
 package com.project.SSPS.response;
 
+import com.project.SSPS.model.Role;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,5 +15,5 @@ public class UserResponse {
     private String email;
     private String phoneNumber;
     private String address;
-    private String role;
+    private Role role;
 }

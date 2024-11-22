@@ -27,6 +27,7 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.stereotype.Service;
 
 import com.nimbusds.jose.util.Base64;
+import com.project.SSPS.model.Role;
 import com.project.SSPS.model.User;
 import com.project.SSPS.response.LoginResponse;
 import com.project.SSPS.response.LoginResponse.UserLogin;
@@ -50,14 +51,13 @@ public class SecurityUtil {
     public String createAccessToken(String email, LoginResponse.UserLogin resLoginDTO) {
         Instant now = Instant.now();
         Instant validity = now.plus(this.jwtAccessExpiration, ChronoUnit.SECONDS);
-        String authorities = resLoginDTO.getRole();
+        Role authorities = resLoginDTO.getRole();
         // @formatter:off 
         JwtClaimsSet claims = JwtClaimsSet.builder() 
             .issuedAt(now) 
             .expiresAt(validity) 
             .subject(email) 
-            .claim("user", resLoginDTO) 
-            .claim("jti", resLoginDTO.getId())
+            .claim("user", resLoginDTO)
             .claim("permissions", authorities)
             .build(); 
  
@@ -72,7 +72,7 @@ public class SecurityUtil {
         Instant validity = now.plus(this.jwtRefreshExpiration, ChronoUnit.SECONDS);
 
         // @formatter:off 
-        String authorities = resLoginDTO.getUser().getRole();
+        Role authorities = resLoginDTO.getUser().getRole();
         JwtClaimsSet claims = JwtClaimsSet.builder() 
             .issuedAt(now) 
             .expiresAt(validity) 
@@ -138,7 +138,7 @@ public class SecurityUtil {
         user.setId((Long) userMap.get("id"));
         user.setEmail((String) userMap.get("email"));
         user.setName((String) userMap.get("fullName"));
-        user.setRole((String) userMap.get("role"));
+        user.setRole((Role) userMap.get("role"));
         return user;
     }
 
