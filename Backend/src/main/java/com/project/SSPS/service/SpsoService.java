@@ -5,7 +5,7 @@ import com.project.SSPS.response.*;
 import java.util.Date;
 import java.util.List;
 
-public class SpsoService implements ISpsoService{
+public class SpsoService implements ISpsoService {
     @Override
     public SpsoResponse findSpsoInfo(String id) {
         return null;
@@ -23,6 +23,7 @@ public class SpsoService implements ISpsoService{
 
     @Override
     public List<PrintResponse> getAllPrintRequests() {
+
         return List.of();
     }
 

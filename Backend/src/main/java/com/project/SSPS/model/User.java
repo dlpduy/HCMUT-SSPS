@@ -34,6 +34,7 @@ public class User implements UserDetails {
     private String email;
     private String phone;
     private String address;
+    private Long numberOfPage;
 
     @Enumerated(value = EnumType.STRING)
     private Role role;

@@ -10,7 +10,7 @@ public class HelloController {
         return "Hello World!";
     }
 
-    @GetMapping("/spso")
+    @GetMapping("api/v1/spso")
     public String pageforSPSO() {
         return "Hello World!";
     }
