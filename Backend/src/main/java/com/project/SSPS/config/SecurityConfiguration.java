@@ -55,8 +55,8 @@ public class SecurityConfiguration {
                 // .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(
                         authz -> authz
-                                .requestMatchers(HttpMethod.POST, "/api/v1/auth/register").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/student").hasAnyAuthority("STUDENT")
                                 .requestMatchers(HttpMethod.GET, "/spso").hasAnyAuthority("SPSO")
 

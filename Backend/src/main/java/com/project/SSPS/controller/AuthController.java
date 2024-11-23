@@ -65,10 +65,9 @@ public class AuthController {
 
         @PostMapping("/login")
         @ApiMessage("Login successfully")
-        public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginDTO loginDTO) {
+        public ResponseEntity<LoginResponse> login( @RequestBody LoginDTO loginDTO) {
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                                 loginDTO.getUsername(), loginDTO.getPassword());
-
                 Authentication authentication = authenticationManagerBuilder.getObject()
                                 .authenticate(authenticationToken);
                 // create a token
