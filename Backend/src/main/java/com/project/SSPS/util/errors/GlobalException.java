@@ -22,7 +22,7 @@ public class GlobalException {
             BadCredentialsException.class,
             InvalidException.class
     })
-    public ResponseEntity<RestResponse<Object>> handleException(Exception e) {
+    public static ResponseEntity<RestResponse<Object>> handleException(Exception e) {
         RestResponse<Object> res = new RestResponse<Object>();
         res.setStatusCode(HttpStatus.BAD_REQUEST.value());
         res.setError(e.getMessage());
