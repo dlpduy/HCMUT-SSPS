@@ -50,14 +50,13 @@ public class AuthController {
         String hashPassword = this.passwordEncoder.encode(registerDTO.getPassword());
         User newUser = new User();
         newUser.setFullName(registerDTO.getFullName());
-        newUser.setEmail(registerDTO.getEmail());
+        newUser.setUsername(registerDTO.getUsername());
         newUser.setPassword(hashPassword);
         newUser.setRole(Role.STUDENT);
         this.userService.handleCreateUser(newUser);
         UserResponse userResponse = new UserResponse();
         userResponse.setId(newUser.getId());
         userResponse.setFullName(newUser.getFullName());
-        userResponse.setEmail(newUser.getEmail());
         userResponse.setRole(newUser.getRole());
         return ResponseEntity.ok(userResponse);
     }
@@ -70,7 +69,7 @@ public class AuthController {
         // Nạp input gồm username/password vào Security
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-            loginDTO.getEmail(), loginDTO.getPassword());
+                loginDTO.getUsername(), loginDTO.getPassword());
 
         // xác thực người dùng => cần viết hàm loadUserByUsername
         Authentication authentication = authenticationManagerBuilder.getObject()
@@ -80,11 +79,11 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication); // set authentication vào
                                                                               // SecurityContext
         LoginResponse resLoginDTO = new LoginResponse();
-        User userDB = this.userService.getUserByEmail(loginDTO.getEmail());
+        User userDB = this.userService.getUserbyUsername(loginDTO.getUsername());
         LoginResponse.UserLogin userLogin = new LoginResponse.UserLogin(userDB.getId(), userDB.getEmail(),
                 userDB.getFullName(), userDB.getRole());
         resLoginDTO.setUser(userLogin);
-        String access_token = this.securityUtil.createAccessToken(loginDTO.getEmail(), userLogin);
+        String access_token = this.securityUtil.createAccessToken(loginDTO.getUsername(), userLogin);
         resLoginDTO.setAccessToken(access_token);
         return ResponseEntity.ok()
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + access_token)

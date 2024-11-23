@@ -1,5 +1,7 @@
 package com.project.SSPS.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,20 +22,31 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "users")
+<<<<<<< HEAD
 @Getter
 @Setter
+=======
+@Data
+>>>>>>> ea80ce5c64d519eab60320799c9c968febdad827
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String fullName;
-    private String email;
+    private String username;
     private String password;
+    private String email;
+    private String phone;
     private String address;
+<<<<<<< HEAD
     private String phoneNumber;
 
     @Enumerated(EnumType.STRING)
+=======
+
+    @Enumerated(value = EnumType.STRING)
+>>>>>>> ea80ce5c64d519eab60320799c9c968febdad827
     private Role role;
 
     @Override
@@ -43,7 +56,11 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
+<<<<<<< HEAD
         return email;
+=======
+        return username;
+>>>>>>> ea80ce5c64d519eab60320799c9c968febdad827
     }
 
     @Override

@@ -135,10 +135,17 @@ public class SecurityUtil {
         Jwt tokenDecoded = this.checkValidRefreshToken(token);
         Map<String, Object> userMap = (Map<String, Object>) tokenDecoded.getClaims().get("user");
         UserLogin user = new UserLogin();
+<<<<<<< HEAD
         user.setId((Long) userMap.get("id"));
         user.setEmail((String) userMap.get("email"));
         user.setName((String) userMap.get("fullName"));
         user.setRole((Role) userMap.get("role"));
+=======
+        // user.setId((Long) userMap.get("id"));
+        // user.setEmail((String) userMap.get("email"));
+        // user.setName((String) userMap.get("fullName"));
+        // user.setRole((String) userMap.get("role"));
+>>>>>>> ea80ce5c64d519eab60320799c9c968febdad827
         return user;
     }
 
