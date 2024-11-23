@@ -1,29 +1,50 @@
 package com.project.SSPS.controller;
 
-import com.project.SSPS.response.SpsoResponse;
+import com.project.SSPS.dto.PrinterDTO;
 import com.project.SSPS.service.ISpsoService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
 @RestController
 @RequestMapping("api/v1/spso/")
+@RequiredArgsConstructor
 public class SpsoController {
-    private ISpsoService spsoService ;
+    private final ISpsoService spsoService ;
 
-    @GetMapping("{id}")
-    public ResponseEntity<SpsoResponse> findSpsoInfo(@PathVariable String id){
-        return ResponseEntity.ok(spsoService.findSpsoInfo(id));
+//    @GetMapping("{id}")
+//    public ResponseEntity<SpsoResponse> findSpsoInfo(@PathVariable String id){
+//        return ResponseEntity.ok(spsoService.findSpsoInfo(id));
+//    }
+
+    @PostMapping("printer")
+    public ResponseEntity<?> createPrinter(@RequestBody PrinterDTO printerDTO){
+        try {
+            return ResponseEntity.ok(spsoService.createPrinter(printerDTO));
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
-
     //get all printer info
     @GetMapping("printers")
     public ResponseEntity<?> getAllprinters(){
-        return ResponseEntity.ok(spsoService.getAllPrinters());
+        try {
+            return ResponseEntity.ok(spsoService.getAllPrinters());
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
     @GetMapping("getPrinterById")
     public ResponseEntity<?> getPrinter(@RequestParam String printer_id){
-        return ResponseEntity.ok(spsoService.getPrinterById(printer_id));
+        try {
+            return ResponseEntity.ok(spsoService.getPrinterById(printer_id));
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     //get all printing history

@@ -58,8 +58,7 @@ public class SecurityConfiguration {
                                 .requestMatchers(HttpMethod.POST, "/api/v1/auth/register").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/student").hasAnyAuthority("STUDENT")
-                                .requestMatchers(HttpMethod.GET, "/spso").hasAnyAuthority("SPSO")
-
+                                .requestMatchers( "/api/v1/spso/*").hasAnyAuthority("SPSO")
                                 .anyRequest().authenticated())
                 .userDetailsService(userDetailCustom)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

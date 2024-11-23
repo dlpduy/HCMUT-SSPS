@@ -1,8 +1,8 @@
 package com.project.SSPS.service;
 
+import com.project.SSPS.dto.PrinterDTO;
 import com.project.SSPS.response.*;
 
-import java.util.Date;
 import java.util.List;
 
 public interface ISpsoService {
@@ -13,6 +13,6 @@ public interface ISpsoService {
     List<PrintResponse> getAllPrintRequestsByPrinterId(String printer_id);
     List<PrintResponse> getAllPrintRequestsByStudentId(String std_id);
     OverallResponse getOverall();
-    PrinterResponse insertNewPrinter(String building, String model, Date importDate);
+    PrinterResponse createPrinter(PrinterDTO printerDTO);
     SemesterResponse newSemester(String semester);
 }

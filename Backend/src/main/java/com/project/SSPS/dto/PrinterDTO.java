@@ -7,7 +7,7 @@ import lombok.*;
 public class PrinterDTO {
     private String brand;
     private String location;
-    private String status;
+    private boolean status;
     private String description;
     private String model;
 }
