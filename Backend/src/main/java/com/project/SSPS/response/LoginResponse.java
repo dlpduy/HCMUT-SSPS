@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class LoginResponse {
     private String accessToken;
     private UserLogin user;
@@ -16,8 +18,7 @@ public class LoginResponse {
     @NoArgsConstructor
     public static class UserLogin {
         private long id;
-        private String email;
-        private String name;
+        private String fullName;
         private Role role;
     }
 }

@@ -30,7 +30,6 @@ import com.nimbusds.jose.util.Base64;
 import com.project.SSPS.model.Role;
 import com.project.SSPS.model.User;
 import com.project.SSPS.response.LoginResponse;
-import com.project.SSPS.response.LoginResponse.UserLogin;
 import com.project.SSPS.util.errors.InvalidException;
 
 @Service
@@ -48,42 +47,43 @@ public class SecurityUtil {
     @Value("${project.jwt.access-token-validity-in-seconds}")
     private long jwtAccessExpiration;
 
-    public String createAccessToken(String email, LoginResponse.UserLogin resLoginDTO) {
-        Instant now = Instant.now();
-        Instant validity = now.plus(this.jwtAccessExpiration, ChronoUnit.SECONDS);
-        Role authorities = resLoginDTO.getRole();
-        // @formatter:off 
-        JwtClaimsSet claims = JwtClaimsSet.builder() 
-            .issuedAt(now) 
-            .expiresAt(validity) 
-            .subject(email) 
-            .claim("user", resLoginDTO)
-            .claim("permissions", authorities)
-            .build(); 
+    // public String createAccessToken(String email, LoginResponse.UserLogin
+    // resLoginDTO) {
+    // Instant now = Instant.now();
+    // Instant validity = now.plus(this.jwtAccessExpiration, ChronoUnit.SECONDS);
+    // Role authorities = resLoginDTO.getRole();
+    //     // @formatter:off 
+    //     JwtClaimsSet claims = JwtClaimsSet.builder() 
+    //         .issuedAt(now) 
+    //         .expiresAt(validity) 
+    //         .subject(email) 
+    //         .claim("user", resLoginDTO)
+    //         .claim("permissions", authorities)
+    //         .build(); 
  
-        JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build(); 
-        return this.jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader,claims)).getTokenValue();
-    }
+    //     JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build(); 
+    //     return this.jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader,claims)).getTokenValue();
+    // }
     @Value("${project.jwt.refresh-token-validity-in-seconds}")
     private long jwtRefreshExpiration;
 
-    public String createRefreshToken(String email, LoginResponse resLoginDTO) {
-        Instant now = Instant.now();
-        Instant validity = now.plus(this.jwtRefreshExpiration, ChronoUnit.SECONDS);
+    // public String createRefreshToken(String email, LoginResponse resLoginDTO) {
+    //     Instant now = Instant.now();
+    //     Instant validity = now.plus(this.jwtRefreshExpiration, ChronoUnit.SECONDS);
 
-        // @formatter:off 
-        Role authorities = resLoginDTO.getUser().getRole();
-        JwtClaimsSet claims = JwtClaimsSet.builder() 
-            .issuedAt(now) 
-            .expiresAt(validity) 
-            .subject(email)
-            .claim("user", resLoginDTO.getUser()) 
-            .claim("permissions", authorities)
-            .build(); 
+    //     // @formatter:off 
+    //     Role authorities = resLoginDTO.getUser().getRole();
+    //     JwtClaimsSet claims = JwtClaimsSet.builder() 
+    //         .issuedAt(now) 
+    //         .expiresAt(validity) 
+    //         .subject(email)
+    //         .claim("user", resLoginDTO.getUser()) 
+    //         .claim("permissions", authorities)
+    //         .build(); 
  
-        JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build(); 
-        return this.jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader,claims)).getTokenValue();
-    }
+    //     JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build(); 
+    //     return this.jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader,claims)).getTokenValue();
+    // }
 
     private SecretKey getSecretKey() {
         byte[] keyBytes = Base64.from(jwtKey).decode();
@@ -131,16 +131,16 @@ public class SecurityUtil {
             .map(authentication -> (String) authentication.getCredentials());
     }
 
-    public UserLogin getUserFromToken(String token) throws InvalidException {
-        Jwt tokenDecoded = this.checkValidRefreshToken(token);
-        Map<String, Object> userMap = (Map<String, Object>) tokenDecoded.getClaims().get("user");
-        UserLogin user = new UserLogin();
-        user.setId((Long) userMap.get("id"));
-        user.setEmail((String) userMap.get("email"));
-        user.setName((String) userMap.get("fullName"));
-        user.setRole((Role) userMap.get("role"));
-        return user;
-    }
+    // public UserLogin getUserFromToken(String token) throws InvalidException {
+    //     Jwt tokenDecoded = this.checkValidRefreshToken(token);
+    //     Map<String, Object> userMap = (Map<String, Object>) tokenDecoded.getClaims().get("user");
+    //     UserLogin user = new UserLogin();
+    //     // user.setId((Long) userMap.get("id"));
+    //     // user.setEmail((String) userMap.get("email"));
+    //     // user.setName((String) userMap.get("fullName"));
+    //     // user.setRole((String) userMap.get("role"));
+    //     return user;
+    // }
 
 
 }

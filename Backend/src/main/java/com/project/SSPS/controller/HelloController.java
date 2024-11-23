@@ -6,12 +6,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class HelloController {
     @GetMapping("/student")
-    public String student() {
+    public String pageforStudent() {
         return "Hello World!";
     }
 
     @GetMapping("/spso")
-    public String spso() {
+    public String pageforSPSO() {
         return "Hello World!";
     }
+
 }
