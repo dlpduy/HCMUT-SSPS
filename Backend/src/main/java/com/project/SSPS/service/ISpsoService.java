@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 public interface ISpsoService {
-    SpsoResponse findSpsoInfo(String id);
+    SpsoResponse findSpsoInfo(Long id);
     List<PrinterResponse> getAllPrinters();
     PrinterResponse getPrinterById(String printer_id);
     List<PrintResponse> getAllPrintRequests();

@@ -1,19 +1,23 @@
 package com.project.SSPS.service;
 
+import com.project.SSPS.model.Printer;
+import com.project.SSPS.repository.PrinterRepository;
 import com.project.SSPS.response.*;
 
 import java.util.Date;
 import java.util.List;
 
 public class SpsoService implements ISpsoService{
+    PrinterRepository printerRepository;
     @Override
-    public SpsoResponse findSpsoInfo(String id) {
+    public SpsoResponse findSpsoInfo(Long id) {
         return null;
     }
 
     @Override
     public List<PrinterResponse> getAllPrinters() {
-        return List.of();
+        List<Printer> printers = printerRepository.findAll();
+
     }
 
     @Override
