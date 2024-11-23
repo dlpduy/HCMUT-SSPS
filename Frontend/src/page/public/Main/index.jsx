@@ -4,7 +4,7 @@ import main from "../../../assets/img/main.png";
 import student from "../../../assets/img/student.png";
 import spso from "../../../assets/img/spso.png";
 
-const role = Cookies.get("role") || "";
+const role = Cookies.get("role") ? Cookies.get("role")?.toLowerCase() : "";
 const Main = () => {
   const navigate = useNavigate();
   return role == "student" ? (
