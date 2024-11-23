@@ -1,18 +1,30 @@
 package com.project.SSPS.service;
 
+import com.project.SSPS.dto.PrinterDTO;
 import com.project.SSPS.response.*;
 
-import java.util.Date;
 import java.util.List;
 
 public interface ISpsoService {
-    SpsoResponse findSpsoInfo(String id);
+    SpsoResponse findSpsoInfo(Long id);
+
     List<PrinterResponse> getAllPrinters();
-    PrinterResponse getPrinterById(String printer_id);
+
+    PrinterResponse getPrinterById(Long printer_id);
+
+    PrinterResponse updatePrinter(Long id, PrinterDTO entity) throws Exception;
+
+    Void deletePrinter(Long id) throws Exception;
+
     List<PrintResponse> getAllPrintRequests();
+
     List<PrintResponse> getAllPrintRequestsByPrinterId(String printer_id);
+
     List<PrintResponse> getAllPrintRequestsByStudentId(String std_id);
+
     OverallResponse getOverall();
-    PrinterResponse insertNewPrinter(String building, String model, Date importDate);
+
+    PrinterResponse createPrinter(PrinterDTO printerDTO);
+
     SemesterResponse newSemester(String semester);
 }
