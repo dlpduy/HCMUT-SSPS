@@ -10,15 +10,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginResponse {
-    private String accessToken;
-    private UserLogin user;
+        private String accessToken;
+        private UserLogin user;
 
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class UserLogin {
-        private long id;
-        private String fullName;
-        private Role role;
-    }
+        @Data
+        @AllArgsConstructor
+        @NoArgsConstructor
+        public static class UserLogin {
+                private long id;
+                private String fullName;
+                private Role role;
+        }
 }

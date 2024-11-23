@@ -17,36 +17,36 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("${api.prefix}/auth")
 public class AuthController {
-        private final AuthService authService;
+    private final AuthService authService;
 
-        public AuthController(AuthService authService) {
-                this.authService = authService;
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+    }
+
+    @PostMapping("/register")
+    @ApiMessage("Register successfully")
+    public ResponseEntity<?> register(@RequestBody RegisterDTO registerDTO) {
+        try {
+            UserResponse resRegisterDTO = this.authService.register(registerDTO);
+            return ResponseEntity.ok().body(resRegisterDTO);
+        } catch (Exception e) {
+            return GlobalException.handleException(e);
         }
 
-        @PostMapping("/register")
-        @ApiMessage("Register successfully")
-        public ResponseEntity<?> register(@RequestBody RegisterDTO registerDTO) {
-                try {
-                        UserResponse resRegisterDTO = this.authService.register(registerDTO);
-                        return ResponseEntity.ok().body(resRegisterDTO);
-                } catch (Exception e) {
-                        return GlobalException.handleException(e);
-                }
+    }
 
-        }
+    @PostMapping("/login")
+    @ApiMessage("Login successfully")
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginDTO loginDTO) {
+        LoginResponse resLoginDTO = this.authService.login(loginDTO);
+        return ResponseEntity.ok().body(resLoginDTO);
+    }
 
-        @PostMapping("/login")
-        @ApiMessage("Login successfully")
-        public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginDTO loginDTO) {
-                LoginResponse resLoginDTO = this.authService.login(loginDTO);
-                return ResponseEntity.ok().body(resLoginDTO);
-        }
-
-        @PostMapping("/logout")
-        @ApiMessage("Logout successfully")
-        public ResponseEntity<Void> logout() {
-                this.authService.logout();
-                return ResponseEntity.ok().build();
-        }
+    @PostMapping("/logout")
+    @ApiMessage("Logout successfully")
+    public ResponseEntity<Void> logout() {
+        this.authService.logout();
+        return ResponseEntity.ok().build();
+    }
 
 }
