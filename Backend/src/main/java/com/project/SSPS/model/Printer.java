@@ -21,11 +21,19 @@ public class Printer {
     private String brand;
     @Column(name = "building", length = 100, nullable = false)
     private String location;
-    @Column(name = "status")
-    private boolean status;
     @Column(name = "model", length = 100, nullable = false)
     private String model;
+    @Column(name = "description", length = 100, nullable = false)
+    private String description;
+    @Column(name = "status")
+    private boolean status;
+    @Column(name = "campus_name", length = 100, nullable = false)
+    private String campusName;
+    @Column(name = "building_name", length = 100, nullable = false)
+    private String buildingName;
+    @Column(name = "room_num", length = 100, nullable = false)
+    private String roomNum;
 
-//    @OneToMany(mappedBy = "printer")
-//    private List<Print> print_list;
+    // @OneToMany(mappedBy = "printer")
+    // private List<Print> print_list;
 }
