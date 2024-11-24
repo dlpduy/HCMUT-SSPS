@@ -17,13 +17,13 @@ import java.io.IOException;
 import java.util.Optional;
 
 @Component
-public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
+public class CustomUnauthorizedEntryPoint implements AuthenticationEntryPoint {
 
     private final AuthenticationEntryPoint delegate = new BearerTokenAuthenticationEntryPoint();
 
     private final ObjectMapper mapper;
 
-    public CustomAuthenticationEntryPoint(ObjectMapper mapper) {
+    public CustomUnauthorizedEntryPoint(ObjectMapper mapper) {
         this.mapper = mapper;
     }
 

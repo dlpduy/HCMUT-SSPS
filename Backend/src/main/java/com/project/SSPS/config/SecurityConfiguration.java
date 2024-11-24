@@ -24,6 +24,9 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
+import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
+import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.client.RestTemplate;
@@ -48,8 +51,9 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http
-    /* CustomAuthenticationEntryPoint customAuthenticationEntryPoint */) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http,
+            CustomUnauthorizedEntryPoint customAuthenticationEntryPoint,
+            CustomAccessDeniedHandler customAccessDeniedHandler) throws Exception {
         return http
                 .csrf(c -> c.disable())
                 // .cors(Customizer.withDefaults())
@@ -57,26 +61,27 @@ public class SecurityConfiguration {
                         authz -> authz
                                 .requestMatchers(HttpMethod.POST, "/api/v1/auth/register").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/student").hasAnyAuthority("STUDENT")
-                                .requestMatchers(HttpMethod.GET, "/spso").hasAnyAuthority("SPSO")
+                                .requestMatchers("/api/v1/student/*").hasAnyAuthority("STUDENT")
+                                .requestMatchers("/api/v1/spso/*").hasAnyAuthority("SPSO")
 
                                 .anyRequest().authenticated())
                 .userDetailsService(userDetailCustom)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                // .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults())
+                // .authenticationEntryPoint(customAuthenticationEntryPoint))
+
+                .exceptionHandling(
+                        exceptions -> exceptions
+                                .authenticationEntryPoint(customAuthenticationEntryPoint) // 401
+                                .accessDeniedHandler(customAccessDeniedHandler)) // 403
+                // .formLogin(Customizer.withDefaults())
+
+                // .logout(Customizer.withDefaults());
+
+                // .sessionManagement(session ->
+                // session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
                 .build();
-        // .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults())
-        // .authenticationEntryPoint(customAuthenticationEntryPoint))
-        // .exceptionHandling(
-        // exceptions -> exceptions
-        // .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint()) // 401
-        // .accessDeniedHandler(new BearerTokenAccessDeniedHandler())) // 403
-        // .formLogin(Customizer.withDefaults())
-
-        // .logout(Customizer.withDefaults());
-
-        // .sessionManagement(session ->
-        // session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
     }
 
     @Bean
