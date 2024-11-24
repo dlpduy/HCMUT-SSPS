@@ -10,28 +10,29 @@ import lombok.NoArgsConstructor;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "printer")
+@Table(name = "printers")
 @Builder
 public class Printer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @Column(name = "brand", length = 100, nullable = false)
+    @Column(name = "brand", length = 50, nullable = false)
     private String brand;
-    @Column(name = "model", length = 100, nullable = false)
+    @Column(name = "model", length = 50, nullable = false)
     private String model;
-    @Column(name = "description", length = 100, nullable = false)
+    //description
+    @Column(name = "description", length = 100)
     private String description;
-    @Column(name = "status")
-    private boolean status;
-    @Column(name = "campus_name", length = 100, nullable = false)
+    @Column(name = "enabled", nullable = false)
+    private boolean enabled;
+    //CampusName
+    @Column(name = "campus_name", length = 50, nullable = false)
     private String campusName;
-    @Column(name = "building_name", length = 100, nullable = false)
+    //buildingName
+    @Column(name = "building_name", length = 10, nullable = false)
     private String buildingName;
-    @Column(name = "room_num", length = 100, nullable = false)
+    //roomNum
+    @Column(name = "room_num", nullable = false)
     private Long roomNum;
-
-    // @OneToMany(mappedBy = "printer")
-    // private List<Print> print_list;
 }

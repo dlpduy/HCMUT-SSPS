@@ -6,6 +6,8 @@ import com.project.SSPS.repository.PrinterRepository;
 import com.project.SSPS.response.*;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 
@@ -31,19 +33,16 @@ public class SpsoService implements ISpsoService {
                 .description(printerDTO.getDescription())
                 .model(printerDTO.getModel())
                 .roomNum(printerDTO.getRoomNum())
-                .status(printerDTO.isStatus())
+                .enabled(printerDTO.isEnabled())
                 .build();
 
         return PrinterResponse.fromPrinter(printerRepository.save(printer));
     }
 
     @Override
-    public List<PrinterResponse> getAllPrinters() {
-        List<Printer> printers = printerRepository.findAll();
-        return printers
-                .stream()
-                .map(PrinterResponse::fromPrinter)
-                .collect(Collectors.toList());
+    public Page<PrinterResponse> getAllPrinters(PageRequest pageRequest) {
+        Page<Printer> printers = printerRepository.findAll(pageRequest);
+        return printers.map(PrinterResponse::fromPrinter);
     }
 
     @Override
@@ -67,7 +66,7 @@ public class SpsoService implements ISpsoService {
         printer.setDescription(entity.getDescription());
         printer.setModel(entity.getModel());
         printer.setRoomNum(entity.getRoomNum());
-        printer.setStatus(entity.isStatus());
+        printer.setEnabled(entity.isEnabled());
         return PrinterResponse.fromPrinter(printerRepository.save(printer));
     }
 

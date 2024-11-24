@@ -1,17 +1,25 @@
 package com.project.SSPS.controller;
 
 import com.project.SSPS.dto.PrinterDTO;
+import com.project.SSPS.response.PrinterListResponse;
+import com.project.SSPS.response.PrinterResponse;
 import com.project.SSPS.service.ISpsoService;
 import com.project.SSPS.util.annotation.ApiMessage;
 import com.project.SSPS.util.errors.GlobalException;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/spso/")
@@ -26,8 +34,17 @@ public class SpsoController {
 
     @PostMapping("printer")
     @ApiMessage("Create printer successfully")
-    public ResponseEntity<?> createPrinter(@Valid @RequestBody PrinterDTO printerDTO) {
+    public ResponseEntity<?> createPrinter(@Valid @RequestBody PrinterDTO printerDTO
+            , BindingResult bindingResult) {
         try {
+            if (bindingResult.hasErrors()) {
+                //return list default message
+                List<String> errorMessages = bindingResult.getFieldErrors()
+                        .stream()
+                        .map(FieldError::getDefaultMessage)
+                        .toList();
+                return ResponseEntity.badRequest().body(errorMessages);
+            }
             return ResponseEntity.ok(spsoService.createPrinter(printerDTO));
         } catch (Exception e) {
             return GlobalException.handleException(e);
@@ -35,11 +52,18 @@ public class SpsoController {
     }
 
     // get all printer info
+    //localhost:8080/api/v1/spso/printer?page=0&size=10
     @GetMapping("printer")
     @ApiMessage("Get all printers successfully")
-    public ResponseEntity<?> getAllprinters() {
+    public ResponseEntity<?> getAllprinters(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
         try {
-            return ResponseEntity.ok(spsoService.getAllPrinters());
+            PageRequest pageRequest = PageRequest.of(page, size);
+            Page<PrinterResponse> printerResponses = spsoService.getAllPrinters(pageRequest);
+            int totalPages = printerResponses.getTotalPages();
+            return ResponseEntity.ok(new PrinterListResponse(printerResponses.getContent(), totalPages));
         } catch (Exception e) {
             return GlobalException.handleException(e);
         }
