@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1")
 public class HelloController {
-    @GetMapping("/student")
+    @GetMapping("/student/hello")
     public String pageforStudent() {
         return "Hello World!";
     }
 
-    @GetMapping("/spso")
+    @GetMapping("/spso/hello")
     public String pageforSPSO() {
         return "Hello World!";
     }

@@ -6,8 +6,10 @@ import lombok.*;
 @Setter
 public class PrinterDTO {
     private String brand;
-    private String location;
-    private boolean status;
+    private String buildingName;
+    private String campusName;
     private String description;
     private String model;
+    private String roomNum;
+    private boolean status;
 }

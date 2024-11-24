@@ -15,12 +15,10 @@ import lombok.NoArgsConstructor;
 public class Printer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "printer_id")
+    @Column(name = "id")
     private Long id;
     @Column(name = "brand", length = 100, nullable = false)
     private String brand;
-    @Column(name = "building", length = 100, nullable = false)
-    private String location;
     @Column(name = "model", length = 100, nullable = false)
     private String model;
     @Column(name = "description", length = 100, nullable = false)

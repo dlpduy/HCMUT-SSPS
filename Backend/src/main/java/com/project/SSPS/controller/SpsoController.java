@@ -5,6 +5,7 @@ import com.project.SSPS.service.ISpsoService;
 import com.project.SSPS.util.annotation.ApiMessage;
 import com.project.SSPS.util.errors.GlobalException;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ public class SpsoController {
 
     @PostMapping("printer")
     @ApiMessage("Create printer successfully")
-    public ResponseEntity<?> createPrinter(@RequestBody PrinterDTO printerDTO) {
+    public ResponseEntity<?> createPrinter(@Valid @RequestBody PrinterDTO printerDTO) {
         try {
             return ResponseEntity.ok(spsoService.createPrinter(printerDTO));
         } catch (Exception e) {
@@ -56,7 +57,7 @@ public class SpsoController {
 
     @PutMapping("printer/{id}")
     @ApiMessage("Update printer successfully")
-    public ResponseEntity<?> updatePrinter(@PathVariable Long id, @RequestBody PrinterDTO entity) {
+    public ResponseEntity<?> updatePrinter(@PathVariable Long id, @Valid @RequestBody PrinterDTO entity) {
         try {
             return ResponseEntity.ok(spsoService.updatePrinter(id, entity));
         } catch (Exception e) {

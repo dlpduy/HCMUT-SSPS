@@ -13,6 +13,8 @@ import com.project.SSPS.response.LoginResponse;
 import com.project.SSPS.response.UserResponse;
 import com.project.SSPS.util.errors.InvalidException;
 
+import jakarta.validation.Valid;
+
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

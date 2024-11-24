@@ -23,6 +23,21 @@ public class SpsoService implements ISpsoService {
     }
 
     @Override
+    public PrinterResponse createPrinter(PrinterDTO printerDTO) {
+        Printer printer = Printer.builder()
+                .brand(printerDTO.getBrand())
+                .buildingName(printerDTO.getBuildingName())
+                .campusName(printerDTO.getCampusName())
+                .description(printerDTO.getDescription())
+                .model(printerDTO.getModel())
+                .roomNum(printerDTO.getRoomNum())
+                .status(printerDTO.isStatus())
+                .build();
+
+        return PrinterResponse.fromPrinter(printerRepository.save(printer));
+    }
+
+    @Override
     public List<PrinterResponse> getAllPrinters() {
         List<Printer> printers = printerRepository.findAll();
         return printers
@@ -44,8 +59,11 @@ public class SpsoService implements ISpsoService {
             throw new Exception("Printer not found");
         }
         printer.setBrand(entity.getBrand());
+        printer.setBuildingName(entity.getBuildingName());
+        printer.setCampusName(entity.getCampusName());
+        printer.setDescription(entity.getDescription());
         printer.setModel(entity.getModel());
-        printer.setLocation(entity.getLocation());
+        printer.setRoomNum(entity.getRoomNum());
         printer.setStatus(entity.isStatus());
         return PrinterResponse.fromPrinter(printerRepository.save(printer));
     }
@@ -79,18 +97,6 @@ public class SpsoService implements ISpsoService {
     @Override
     public OverallResponse getOverall() {
         return null;
-    }
-
-    @Override
-    public PrinterResponse createPrinter(PrinterDTO printerDTO) {
-        Printer printer = Printer.builder()
-                .brand(printerDTO.getBrand())
-                .model(printerDTO.getModel())
-                .location(printerDTO.getLocation())
-                .status(printerDTO.isStatus())
-                .build();
-
-        return PrinterResponse.fromPrinter(printerRepository.save(printer));
     }
 
     @Override
