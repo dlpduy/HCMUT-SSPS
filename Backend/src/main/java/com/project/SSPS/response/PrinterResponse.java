@@ -17,7 +17,7 @@ public class PrinterResponse {
     private String campusName;
     private String description;
     private String model;
-    private String roomNum;
+    private Long roomNum;
     private boolean status;
 
     public static PrinterResponse fromPrinter(Printer printer) {

@@ -10,6 +10,6 @@ public class PrinterDTO {
     private String campusName;
     private String description;
     private String model;
-    private String roomNum;
+    private Long roomNum;
     private boolean status;
 }

@@ -47,8 +47,11 @@ public class SpsoService implements ISpsoService {
     }
 
     @Override
-    public PrinterResponse getPrinterById(Long printer_id) {
+    public PrinterResponse getPrinterById(Long printer_id) throws Exception {
         Printer printer = printerRepository.findById(printer_id).orElse(null);
+        if (printer == null) {
+            throw new Exception("Printer not found");
+        }
         return PrinterResponse.fromPrinter(printer);
     }
 

@@ -30,7 +30,7 @@ public class Printer {
     @Column(name = "building_name", length = 100, nullable = false)
     private String buildingName;
     @Column(name = "room_num", length = 100, nullable = false)
-    private String roomNum;
+    private Long roomNum;
 
     // @OneToMany(mappedBy = "printer")
     // private List<Print> print_list;

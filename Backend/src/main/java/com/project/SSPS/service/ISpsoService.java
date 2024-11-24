@@ -10,7 +10,7 @@ public interface ISpsoService {
 
     List<PrinterResponse> getAllPrinters();
 
-    PrinterResponse getPrinterById(Long printer_id);
+    PrinterResponse getPrinterById(Long printer_id) throws Exception;
 
     PrinterResponse updatePrinter(Long id, PrinterDTO entity) throws Exception;
 

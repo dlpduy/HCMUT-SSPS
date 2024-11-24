@@ -35,7 +35,7 @@ public class SpsoController {
     }
 
     // get all printer info
-    @GetMapping("printers")
+    @GetMapping("printer")
     @ApiMessage("Get all printers successfully")
     public ResponseEntity<?> getAllprinters() {
         try {
@@ -45,9 +45,9 @@ public class SpsoController {
         }
     }
 
-    @GetMapping("printer")
+    @GetMapping("printer/{printer_id}")
     @ApiMessage("Get printer by id successfully")
-    public ResponseEntity<?> getPrinter(@RequestParam Long printer_id) {
+    public ResponseEntity<?> getPrinter(@PathVariable Long printer_id) {
         try {
             return ResponseEntity.ok(spsoService.getPrinterById(printer_id));
         } catch (Exception e) {
@@ -84,7 +84,11 @@ public class SpsoController {
 
     @GetMapping("page")
     public ResponseEntity<?> getAllPurchasedPages(@RequestParam Long printer_id) {
-        return ResponseEntity.ok(spsoService.getPrinterById(printer_id));
+        try {
+            return ResponseEntity.ok(spsoService.getPrinterById(printer_id));
+        } catch (Exception e) {
+            return GlobalException.handleException(e);
+        }
     }
 
     // @GetMapping("statistic")

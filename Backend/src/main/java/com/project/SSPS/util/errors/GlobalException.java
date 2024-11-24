@@ -30,6 +30,14 @@ public class GlobalException {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
     }
 
+    public static ResponseEntity<RestResponse<Object>> handleNotFault(Exception e) {
+        RestResponse<Object> res = new RestResponse<Object>();
+        res.setStatusCode(HttpStatus.NOT_FOUND.value());
+        res.setError(e.getMessage());
+        res.setMessage("Bad request");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(res);
+    }
+
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity<RestResponse<Object>> validationError(MethodArgumentNotValidException e) {
         BindingResult bindingResult = e.getBindingResult();
