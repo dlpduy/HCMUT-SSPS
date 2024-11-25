@@ -1,6 +1,7 @@
 package com.project.SSPS.util;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -9,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
+
 
 public class VNPayUtil {
     public static String hmacSHA512(final String key, final String data) {
