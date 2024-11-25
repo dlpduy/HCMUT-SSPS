@@ -1,7 +1,5 @@
 package com.project.SSPS.model;
 
-import org.hibernate.validator.constraints.UniqueElements;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
