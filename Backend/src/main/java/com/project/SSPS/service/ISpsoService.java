@@ -1,14 +1,19 @@
 package com.project.SSPS.service;
 
 import com.project.SSPS.dto.PrinterDTO;
+import com.project.SSPS.model.PrintingLog;
 import com.project.SSPS.response.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
 public interface ISpsoService {
+    PrinterResponse createPrinter(PrinterDTO printerDTO);
+
     SpsoResponse findSpsoInfo(Long id);
 
-    List<PrinterResponse> getAllPrinters();
+    Page<PrinterResponse> getAllPrinters(PageRequest pageRequest);
 
     PrinterResponse getPrinterById(Long printer_id) throws Exception;
 
@@ -16,15 +21,6 @@ public interface ISpsoService {
 
     Void deletePrinter(Long id) throws Exception;
 
-    List<PrintResponse> getAllPrintRequests();
+    Page<PrintingLogResponse> getAllPrintRequests(PageRequest pageRequest);
 
-    List<PrintResponse> getAllPrintRequestsByPrinterId(String printer_id);
-
-    List<PrintResponse> getAllPrintRequestsByStudentId(String std_id);
-
-    OverallResponse getOverall();
-
-    PrinterResponse createPrinter(PrinterDTO printerDTO);
-
-    SemesterResponse newSemester(String semester);
 }
