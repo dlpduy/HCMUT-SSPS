@@ -2,7 +2,9 @@ package com.project.SSPS.service;
 
 import com.project.SSPS.dto.PrinterDTO;
 import com.project.SSPS.model.Printer;
+import com.project.SSPS.model.PrintingLog;
 import com.project.SSPS.repository.PrinterRepository;
+import com.project.SSPS.repository.PrintingLogRepository;
 import com.project.SSPS.response.*;
 import lombok.RequiredArgsConstructor;
 
@@ -18,7 +20,7 @@ import java.util.stream.Collectors;
 @Service
 public class SpsoService implements ISpsoService {
     private final PrinterRepository printerRepository;
-
+    private final PrintingLogRepository printingLogRepository;
     @Override
     public SpsoResponse findSpsoInfo(Long id) {
         return null;
@@ -81,28 +83,9 @@ public class SpsoService implements ISpsoService {
     }
 
     @Override
-    public List<PrintResponse> getAllPrintRequests() {
-
-        return List.of();
+    public Page<PrintingLogResponse> getAllPrintRequests(PageRequest pageRequest) {
+        Page<PrintingLog>  printingLogs = printingLogRepository.findAll(pageRequest);
+        return printingLogs.map(PrintingLogResponse::fromPrintingLog);
     }
 
-    @Override
-    public List<PrintResponse> getAllPrintRequestsByPrinterId(String printer_id) {
-        return List.of();
-    }
-
-    @Override
-    public List<PrintResponse> getAllPrintRequestsByStudentId(String std_id) {
-        return List.of();
-    }
-
-    @Override
-    public OverallResponse getOverall() {
-        return null;
-    }
-
-    @Override
-    public SemesterResponse newSemester(String semester) {
-        return null;
-    }
 }
