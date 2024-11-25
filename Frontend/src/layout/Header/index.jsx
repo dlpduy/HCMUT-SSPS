@@ -7,16 +7,16 @@ const HeaderItems = (role) => {
   if (role?.role == "student")
     return (
       <div className="self-center mx-auto grid grid-cols-4 grid-rows-1 gap-4">
-        <Link className="text-[#0022FF] text-base font-bold" to="main">
+        <Link className="text-[#0022FF] text-base font-bold" to="/main">
           Trang chủ
         </Link>
-        <Link className="text-[#0022FF] text-base font-bold" to="student/print">
+        <Link className="text-[#0022FF] text-base font-bold" to="/student/print">
           In tài liệu
         </Link>
-        <Link className="text-[#0022FF] text-base font-bold" to="student/buy-paper">
+        <Link className="text-[#0022FF] text-base font-bold" to="/student/purchase-paper">
           Mua giấy in
         </Link>
-        <Link className="text-[#0022FF] text-base font-bold" to="student/print-history">
+        <Link className="text-[#0022FF] text-base font-bold" to="/student/print-history">
           Xem lịch sử
         </Link>
       </div>
@@ -24,32 +24,32 @@ const HeaderItems = (role) => {
   if (role?.role == "spso")
     return (
       <div className="self-center mx-auto grid grid-cols-6 grid-rows-1 gap-4">
-        <Link className="text-[#0022FF] text-base font-bold" to="main">
+        <Link className="text-[#0022FF] text-base font-bold" to="/main">
           Trang chủ
         </Link>
-        <Link className="text-[#0022FF] text-base font-bold" to="spso/dashboard">
+        <Link className="text-[#0022FF] text-base font-bold" to="/spso/dashboard">
           Thống kê
         </Link>
-        <Link className="text-[#0022FF] text-base font-bold" to="spso/config-system">
+        <Link className="text-[#0022FF] text-base font-bold" to="/spso/config-system">
           Thiết lập hệ thống
         </Link>
-        <Link className="text-[#0022FF] text-base font-bold" to="spso/printer-management">
+        <Link className="text-[#0022FF] text-base font-bold" to="/spso/printer-management">
           Quản lý máy in
         </Link>
-        <Link className="text-[#0022FF] text-base font-bold" to="spso/printing-history">
+        <Link className="text-[#0022FF] text-base font-bold" to="/spso/printing-history">
           Lịch sử in
         </Link>
-        <Link className="text-[#0022FF] text-base font-bold" to="spso/buy-paper-history">
+        <Link className="text-[#0022FF] text-base font-bold" to="/spso/purchase-paper-history">
           Lịch sử mua giấy in
         </Link>
       </div>
     );
   return (
     <div className="self-center mx-auto grid grid-cols-2 grid-rows-1 gap-4">
-      <Link className="text-[#0022FF] text-base font-bold" to="main">
+      <Link className="text-[#0022FF] text-base font-bold" to="/main">
         Trang chủ
       </Link>
-      <Link className="text-[#0022FF] text-base font-bold" to="main">
+      <Link className="text-[#0022FF] text-base font-bold" to="/main">
         Liên hệ
       </Link>
     </div>
