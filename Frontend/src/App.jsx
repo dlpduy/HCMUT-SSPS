@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import "./App.css";
 
 const token = Cookies.get("token");
-const role = Cookies.get("role");
+const role = Cookies.get("role")?.toLowerCase();
 function App() {
   return (
     <BrowserRouter
@@ -18,7 +18,7 @@ function App() {
           privateRouter.map((routes) => {
             return (
               routes.path == role && (
-                <Route path={routes.path} element={<routes.element />}>
+                <Route path={routes.path} element={<routes.element />} key={routes.path}>
                   {routes.children.map(({ subPath, Component }, index) => {
                     return <Route key={index} path={subPath} element={<Component />} />;
                   })}

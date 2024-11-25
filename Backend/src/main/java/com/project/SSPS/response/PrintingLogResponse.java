@@ -16,7 +16,7 @@ public class PrintingLogResponse {
     private Long numCopy;
     private String paperType;
     private String sided;
-    private String color;
+    private String printingPages;
     private Long numPages;
     private LocalDateTime time;
 
@@ -29,7 +29,7 @@ public class PrintingLogResponse {
         response.setPrinterId(printingLog.getPrinter().getId());
         response.setNumCopy(printingLog.getNumCopy());
         response.setSided(printingLog.getSided().name());
-        response.setColor(printingLog.getPrintingPages());
+        response.setPrintingPages(printingLog.getPrintingPages());
         response.setNumPages(printingLog.getNumPages());
         response.setTime(printingLog.getTime());
         return response;

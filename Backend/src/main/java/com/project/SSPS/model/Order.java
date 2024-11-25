@@ -1,19 +1,24 @@
 package com.project.SSPS.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import java.time.LocalDateTime;
 
-//@Entity
+@Data
+@EqualsAndHashCode(callSuper = true)
+@Entity
 @Table(name = "orders")
-public class Order {
+public class Order extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "student_id")
     private Long studentId;
-    private Long totalPrice;
 
+    @Column(name = "total_price")
+    private Double totalPrice;
+
+    private LocalDateTime time;
 }
