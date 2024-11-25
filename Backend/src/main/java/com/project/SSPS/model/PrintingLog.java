@@ -4,11 +4,10 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
-
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "printing_logs", uniqueConstraints = {@UniqueConstraint(columnNames = {"file_id", "time"})})
+@Table(name = "printing_logs", uniqueConstraints = { @UniqueConstraint(columnNames = { "file_id", "time" }) })
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,18 +19,17 @@ public class PrintingLog {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "printer_id")
+    @JoinColumn(name = "printer_id", referencedColumnName = "id", nullable = false)
     private Printer printer;
 
     @ManyToOne
-    @JoinColumn(name = "paper_type", nullable = false)
+    @JoinColumn(name = "paper_type", referencedColumnName = "type", nullable = false)
     private Paper paper;
 
     @ManyToOne
     @NotNull(message = "File ID is mandatory")
-    @JoinColumn(name = "file_id", nullable = false)
+    @JoinColumn(name = "file_id", referencedColumnName = "id", nullable = false)
     private File file;
-
 
     @NotNull(message = "Number of copies is mandatory")
     @Min(value = 1, message = "Number of copies must be at least 1")

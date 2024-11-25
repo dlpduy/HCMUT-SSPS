@@ -22,10 +22,11 @@ public class PrintingLogResponse {
 
     public static PrintingLogResponse fromPrintingLog(PrintingLog printingLog) {
         PrintingLogResponse response = new PrintingLogResponse();
-//        response.setStudentId(printingLog.getFile().getStudentId());
-//        response.setPaperType(printingLog.getPaperType());
-//        response.setPrinterId(printingLog.getPrinter().getId());
-
+        response.setStudentId(printingLog.getFile().getStudent().getId());
+        response.setFileName(printingLog.getFile().getFileName());
+        response.setFileType(printingLog.getFile().getFileType());
+        response.setPaperType(printingLog.getPaper().getType());
+        response.setPrinterId(printingLog.getPrinter().getId());
         response.setNumCopy(printingLog.getNumCopy());
         response.setSided(printingLog.getSided().name());
         response.setColor(printingLog.getPrintingPages());
