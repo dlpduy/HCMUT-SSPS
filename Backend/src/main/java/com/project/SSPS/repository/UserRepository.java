@@ -1,4 +1,4 @@
-package com.project.SSPS.repositorie;
+package com.project.SSPS.repository;
 
 import org.springframework.stereotype.Repository;
 

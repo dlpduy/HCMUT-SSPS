@@ -22,12 +22,20 @@ public class GlobalException {
             BadCredentialsException.class,
             InvalidException.class
     })
-    public ResponseEntity<RestResponse<Object>> handleException(Exception e) {
+    public static ResponseEntity<RestResponse<Object>> handleException(Exception e) {
         RestResponse<Object> res = new RestResponse<Object>();
         res.setStatusCode(HttpStatus.BAD_REQUEST.value());
         res.setError(e.getMessage());
         res.setMessage("Bad request");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+    }
+
+    public static ResponseEntity<RestResponse<Object>> handleNotFault(Exception e) {
+        RestResponse<Object> res = new RestResponse<Object>();
+        res.setStatusCode(HttpStatus.NOT_FOUND.value());
+        res.setError(e.getMessage());
+        res.setMessage("Bad request");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(res);
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)

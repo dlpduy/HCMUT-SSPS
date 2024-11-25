@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.project.SSPS.model.User;
-import com.project.SSPS.repositorie.UserRepository;
+import com.project.SSPS.repository.UserRepository;
 
 @Service
 public class UserService {

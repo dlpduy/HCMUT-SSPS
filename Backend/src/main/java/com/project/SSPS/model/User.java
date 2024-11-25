@@ -18,10 +18,13 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "users")
+@Inheritance(strategy = InheritanceType.JOINED)
 @Data
 public class User implements UserDetails {
     @Id
@@ -31,7 +34,6 @@ public class User implements UserDetails {
     private String fullName;
     private String username;
     private String password;
-    private String email;
     private String phone;
     private String address;
 
