@@ -44,7 +44,12 @@ public class AuthService {
         newUser.setFullName(registerDTO.getFullName());
         newUser.setUsername(registerDTO.getUsername());
         newUser.setPassword(hashPassword);
-        newUser.setRole(Role.STUDENT);
+
+        if (registerDTO.getUsername().equals("spsohcmut@gmail.com"))
+            newUser.setRole(Role.SPSO);
+        else
+            newUser.setRole(Role.STUDENT);
+
         User user = this.userService.handleCreateUser(newUser);
         UserResponse userResponse = new UserResponse(user.getId(), user.getFullName(), user.getUsername(),
                 user.getRole());
