@@ -3,8 +3,8 @@ package com.project.SSPS.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.project.SSPS.dto.FileTypeDTO;
-import com.project.SSPS.service.FileTypeService;
+import com.project.SSPS.dto.PaperDTO;
+import com.project.SSPS.service.PaperService;
 import com.project.SSPS.util.annotation.ApiMessage;
 import com.project.SSPS.util.errors.GlobalException;
 
@@ -21,59 +21,58 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("api/v1/spso")
-public class FileTypeController {
-    private final FileTypeService fileTypeService;
+public class PaperController {
+    private final PaperService paperService;
 
-    public FileTypeController(FileTypeService fileTypeService) {
-        this.fileTypeService = fileTypeService;
+    public PaperController(PaperService paperService) {
+        this.paperService = paperService;
     }
 
-    @PostMapping("/filetype")
-    @ApiMessage("Create file successfully")
-    public ResponseEntity<?> create(@Valid @RequestBody FileTypeDTO fileTypeDTO, HttpServletRequest request) {
+    @PostMapping("/paper")
+    @ApiMessage("Create paper successfully")
+    public ResponseEntity<?> create(@Valid @RequestBody PaperDTO paperDTO, HttpServletRequest request) {
         try {
-            return ResponseEntity.ok().body(fileTypeService.create(fileTypeDTO, request));
+            return ResponseEntity.ok().body(paperService.create(paperDTO, request));
         } catch (Exception e) {
             return GlobalException.handleException(e);
         }
     }
 
-    @GetMapping("/filetype")
-    @ApiMessage("Get all file types")
+    @PutMapping("/paper/{id}")
+    @ApiMessage("Update paper successfully")
+    public ResponseEntity<?> update(@Valid @RequestBody PaperDTO paperDTO, @PathVariable Long id) {
+        try {
+            return ResponseEntity.ok().body(paperService.update(paperDTO, id));
+        } catch (Exception e) {
+            return GlobalException.handleException(e);
+        }
+    }
+
+    @GetMapping("/paper")
+    @ApiMessage("Get all papers")
     public ResponseEntity<?> getAll() {
         try {
-            return ResponseEntity.ok().body(fileTypeService.getAll());
+            return ResponseEntity.ok().body(paperService.getAll());
         } catch (Exception e) {
             return GlobalException.handleException(e);
         }
     }
 
-    @GetMapping("/filetype/{id}")
-    @ApiMessage("Get file type by id")
+    @GetMapping("/paper/{id}")
+    @ApiMessage("Get paper by id")
     public ResponseEntity<?> getById(@PathVariable Long id) {
         try {
-            return ResponseEntity.ok().body(fileTypeService.getById(id));
+            return ResponseEntity.ok().body(paperService.getById(id));
         } catch (Exception e) {
             return GlobalException.handleException(e);
         }
     }
 
-    @PutMapping("/filetype/{id}")
-    @ApiMessage("Update file type by id")
-    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody FileTypeDTO fileTypeDTO) {
-        try {
-            return ResponseEntity.ok().body(fileTypeService.update(id, fileTypeDTO));
-        } catch (Exception e) {
-            return GlobalException.handleException(e);
-        }
-    }
-
-    @DeleteMapping("/filetype/{id}")
-    @ApiMessage("Delete file type by id")
+    @DeleteMapping("/paper/{id}")
+    @ApiMessage("Delete paper by id")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         try {
-            fileTypeService.delete(id);
-            return ResponseEntity.ok().body("File type deleted successfully");
+            return ResponseEntity.ok().body(paperService.delete(id));
         } catch (Exception e) {
             return GlobalException.handleException(e);
         }
