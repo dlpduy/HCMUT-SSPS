@@ -1,13 +1,23 @@
 package com.project.SSPS.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-//@Entity
+@Data
+@EqualsAndHashCode(callSuper = true)
+@Entity
 @Table(name = "order_papers")
-public class OrderPaper {
+public class OrderPaper extends BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
+    @Column(name = "order_id")
     private Long orderId;
+
+    @Column(name = "paper_type")
     private String paperType;
+
     private Long quantity;
 }
