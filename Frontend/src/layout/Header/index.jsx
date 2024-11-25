@@ -1,7 +1,9 @@
 /* eslint-disable react/prop-types */
 import { Link, useNavigate } from "react-router-dom";
-import { Button } from "antd";
+import { Button, Tooltip } from "antd";
 import logo from "../../assets/img/logo.png";
+import Cookies from "js-cookie";
+import { LogoutOutlined } from "@ant-design/icons";
 
 const HeaderItems = (role) => {
   if (role?.role == "student")
@@ -63,7 +65,20 @@ const HeaderPage = ({ role }) => {
       <img className="h-14 cursor-pointer" src={logo} alt="" onClick={() => navigate("/main", { replace: true })} />
       <HeaderItems role={role} />
       {role ? (
-        <div className="">{role}</div>
+        <div className="flex flex-row w-fit">
+          <div className="w-20">{role}</div>
+          <Tooltip placement="bottomLeft" title={"Log out!"}>
+            <Button
+              icon={<LogoutOutlined />}
+              className="bg-transparent border-none hover:!bg-transparent hover:!border-none self-center"
+              onClick={() => {
+                Cookies.remove("role");
+                Cookies.remove("token");
+                Cookies.remove("name");
+              }}
+            />
+          </Tooltip>
+        </div>
       ) : (
         <Button className="h-12 w-32 text-white bg-[#2600FF] text-lg font-bold" onClick={() => navigate("/login", { replace: true })}>
           Đăng nhập
