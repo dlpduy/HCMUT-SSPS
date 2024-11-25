@@ -18,7 +18,7 @@ public class PrinterResponse {
     private String description;
     private String model;
     private Long roomNum;
-    private boolean status;
+    private boolean enabled;
 
     public static PrinterResponse fromPrinter(Printer printer) {
         return PrinterResponse.builder()
@@ -29,7 +29,7 @@ public class PrinterResponse {
                 .description(printer.getDescription())
                 .model(printer.getModel())
                 .roomNum(printer.getRoomNum())
-                .status(printer.isStatus())
+                .enabled(printer.isEnabled())
                 .build();
     }
 }
