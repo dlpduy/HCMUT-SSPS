@@ -3,6 +3,8 @@ package com.project.SSPS.controller;
 import com.project.SSPS.dto.PrinterDTO;
 import com.project.SSPS.response.PrinterListResponse;
 import com.project.SSPS.response.PrinterResponse;
+import com.project.SSPS.response.PrintingLogListResponse;
+import com.project.SSPS.response.PrintingLogResponse;
 import com.project.SSPS.service.ISpsoService;
 import com.project.SSPS.util.annotation.ApiMessage;
 import com.project.SSPS.util.errors.GlobalException;
@@ -102,8 +104,18 @@ public class SpsoController {
 
     // get all printing history
     @GetMapping("print")
-    public ResponseEntity<?> getAllPrintRequests() {
-        return ResponseEntity.ok(spsoService.getAllPrintRequests());
+    public ResponseEntity<?> getAllPrintRequests(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        try {
+            PageRequest pageRequest = PageRequest.of(page, size);
+            Page<PrintingLogResponse> printingLogResponses = spsoService.getAllPrintRequests(pageRequest);
+            int totalPages = printingLogResponses.getTotalPages();
+            return ResponseEntity.ok(new PrintingLogListResponse(printingLogResponses.getContent(), totalPages));
+        } catch (Exception e) {
+            return GlobalException.handleException(e);
+        }
     }
 
     @GetMapping("page")

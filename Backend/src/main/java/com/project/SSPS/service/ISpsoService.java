@@ -1,6 +1,7 @@
 package com.project.SSPS.service;
 
 import com.project.SSPS.dto.PrinterDTO;
+import com.project.SSPS.model.PrintingLog;
 import com.project.SSPS.response.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,13 +21,6 @@ public interface ISpsoService {
 
     Void deletePrinter(Long id) throws Exception;
 
-    List<PrintResponse> getAllPrintRequests();
+    Page<PrintingLogResponse> getAllPrintRequests(PageRequest pageRequest);
 
-    List<PrintResponse> getAllPrintRequestsByPrinterId(String printer_id);
-
-    List<PrintResponse> getAllPrintRequestsByStudentId(String std_id);
-
-    OverallResponse getOverall();
-
-    SemesterResponse newSemester(String semester);
 }
