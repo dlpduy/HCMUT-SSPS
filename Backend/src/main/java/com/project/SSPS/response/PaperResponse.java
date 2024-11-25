@@ -21,7 +21,7 @@ public class PaperResponse {
 
     public static PaperResponse fromPaper(Paper paper) {
         return PaperResponse.builder()
-                .id(paper.getId())
+//                .id(paper.getId())
                 .type(paper.getType())
                 .width(paper.getWidth())
                 .height(paper.getHeight())

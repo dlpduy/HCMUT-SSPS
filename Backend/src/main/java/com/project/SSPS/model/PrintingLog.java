@@ -24,8 +24,6 @@ public class PrintingLog {
     private Printer printer;
 
     @ManyToOne
-    @NotBlank(message = "Paper type is mandatory")
-    @Size(max = 4, message = "Paper type can have at most 4 characters")
     @JoinColumn(name = "paper_type", nullable = false)
     private Paper paper;
 

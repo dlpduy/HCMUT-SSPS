@@ -29,10 +29,6 @@ import java.util.List;
 public class SpsoController {
     private final ISpsoService spsoService;
 
-    // @GetMapping("{id}")
-    // public ResponseEntity<SpsoResponse> findSpsoInfo(@PathVariable String id){
-    // return ResponseEntity.ok(spsoService.findSpsoInfo(id));
-    // }
 
     @PostMapping("printer")
     @ApiMessage("Create printer successfully")
@@ -103,6 +99,7 @@ public class SpsoController {
     }
 
     // get all printing history
+    //http://localhost:8386/api/v1/spso/print?page=0&size=10
     @GetMapping("print")
     public ResponseEntity<?> getAllPrintRequests(
             @RequestParam(defaultValue = "0") int page,

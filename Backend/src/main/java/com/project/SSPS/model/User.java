@@ -19,7 +19,7 @@ import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
 
-//@Entity
+@Entity
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.JOINED)
 @Data
