@@ -86,8 +86,8 @@ const BuyPaperHistory = () => {
 
   return (
     <div className="p-4 bg-lightblue min-h-screen">
-      <h2 className="text-darkblue text-xl font-bold mb-4" style={{ paddingLeft: '150px' }}>Lịch sử mua giấy in</h2>
-      <div style={{ display: 'grid', placeItems: 'center', height: '80vh' }}>
+      <h2 className="text-darkblue text-xl font-bold mb-4" style={{paddingTop: '150px', paddingLeft: '150px' }}>Lịch sử mua giấy in</h2>
+      <div style={{ display: 'grid', placeItems: 'center', paddingTop: '5px' }}>
         <Table
           columns={columns}
           dataSource={data}
