@@ -18,20 +18,20 @@ public class PrintingLogResponse {
     private String sided;
     private String printingPages;
     private Long numPages;
-    private LocalDateTime time;
+    private LocalDateTime createAt;
 
     public static PrintingLogResponse fromPrintingLog(PrintingLog printingLog) {
         PrintingLogResponse response = new PrintingLogResponse();
         response.setStudentId(printingLog.getFile().getStudent().getId());
         response.setFileName(printingLog.getFile().getFileName());
-        response.setFileType(printingLog.getFile().getFileType());
+        response.setFileType(printingLog.getFile().getFileType().getType());
         response.setPaperType(printingLog.getPaper().getType());
         response.setPrinterId(printingLog.getPrinter().getId());
         response.setNumCopy(printingLog.getNumCopy());
         response.setSided(printingLog.getSided().name());
         response.setPrintingPages(printingLog.getPrintingPages());
         response.setNumPages(printingLog.getNumPages());
-        response.setTime(printingLog.getTime());
+        response.setCreateAt(printingLog.getCreateAt());
         return response;
     }
 }

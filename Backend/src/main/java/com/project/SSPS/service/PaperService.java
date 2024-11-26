@@ -14,7 +14,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-
 import com.project.SSPS.model.Paper;
 import com.project.SSPS.repository.PaperRepository;
 import com.project.SSPS.response.PaperResponse;
@@ -27,18 +26,17 @@ public class PaperService {
     private final JwtService jwtService;
     private final PaperRepository paperRepository;
     private final OrderRepository orderRepository;
-    private final  OrderPaperRepository orderPaperRepository;
+    private final OrderPaperRepository orderPaperRepository;
     private final HttpServletRequest httpServletRequest;
     private final StudentPaperRepository studentPaperRepository;
 
     public PaperService(UserService userService,
-                        JwtService jwtService,
-                        PaperRepository paperRepository,
-                        OrderRepository orderRepository,
-                        OrderPaperRepository orderPaperRepository,
-                        HttpServletRequest httpServletRequest,
-                        StudentPaperRepository studentPaperRepository, StudentPaperRepository studentPaperRepository1
-    ) {
+            JwtService jwtService,
+            PaperRepository paperRepository,
+            OrderRepository orderRepository,
+            OrderPaperRepository orderPaperRepository,
+            HttpServletRequest httpServletRequest,
+            StudentPaperRepository studentPaperRepository, StudentPaperRepository studentPaperRepository1) {
         this.userService = userService;
         this.jwtService = jwtService;
         this.paperRepository = paperRepository;
@@ -47,11 +45,11 @@ public class PaperService {
         this.httpServletRequest = httpServletRequest;
         this.studentPaperRepository = studentPaperRepository;
     }
+
     @Transactional
     public void buyPages(Long studentId, BuyPageDTO request) {
         Order order = new Order();
         order.setStudentId(studentId);
-        order.setTime(LocalDateTime.now());
         order.setTotalPrice(calculatePrice(request.getPaperType(), request.getQuantity()));
         orderRepository.save(order);
 
@@ -61,7 +59,8 @@ public class PaperService {
         orderPaper.setQuantity(request.getQuantity());
         orderPaperRepository.save(orderPaper);
 
-        StudentPaper studentPaper = studentPaperRepository.findByStudentIdAndPaperType(studentId, request.getPaperType());
+        StudentPaper studentPaper = studentPaperRepository.findByStudentIdAndPaperType(studentId,
+                request.getPaperType());
 
         if (studentPaper == null) {
             studentPaper = new StudentPaper();
@@ -90,7 +89,6 @@ public class PaperService {
         return PaperResponse.fromPaper(paper);
     }
 
-
     public PaperResponse update(PaperDTO paperDTO, Long id) {
         Paper paper = paperRepository.findById(id).orElse(null);
         if (paper == null) {
@@ -105,18 +103,19 @@ public class PaperService {
         return PaperResponse.fromPaper(paper);
     }
 
-    public List<PageResponse> getPagesLeft(Long studentId){
-            List<StudentPaper> studentPapers = studentPaperRepository.findByStudentId(studentId);
-            List<PageResponse> responses = new ArrayList<>();
+    public List<PageResponse> getPagesLeft(Long studentId) {
+        List<StudentPaper> studentPapers = studentPaperRepository.findByStudentId(studentId);
+        List<PageResponse> responses = new ArrayList<>();
 
-            for(StudentPaper studentPaper : studentPapers) {
-                PageResponse pageResponse = new PageResponse();
-                pageResponse.setPaperType(studentPaper.getPaperType());
-                pageResponse.setQuantity(studentPaper.getQuantity());
-                responses.add(pageResponse);
-            }
-            return responses;
+        for (StudentPaper studentPaper : studentPapers) {
+            PageResponse pageResponse = new PageResponse();
+            pageResponse.setPaperType(studentPaper.getPaperType());
+            pageResponse.setQuantity(studentPaper.getQuantity());
+            responses.add(pageResponse);
         }
+        return responses;
+    }
+
     public PaperResponse getById(Long id) throws Exception {
         Paper paper = paperRepository.findById(id).orElse(null);
         if (paper == null) {
@@ -127,14 +126,15 @@ public class PaperService {
     }
 
     public List<OrderHistoryResponse> getPageBuyingHistory(Long studentId) {
-        List<Order> orders = orderRepository.findByStudentIdOrderByTimeDesc(studentId);
+        List<Order> orders = orderRepository.findByStudentIdOrderByCreateAtDesc(studentId);
         List<OrderHistoryResponse> responses = new ArrayList<>();
 
         for (Order order : orders) {
             OrderHistoryResponse response = new OrderHistoryResponse();
             response.setOrderId(order.getId());
             response.setTotalPrice(order.getTotalPrice());
-            response.setTime(order.getTime());
+            response.setCreateAt(order.getCreateAt());
+            response.setUpdateAt(order.getUpdateAt());
 
             List<OrderPaper> orderPapers = orderPaperRepository.findByOrderId(order.getId());
             List<OrderHistoryResponse.OrderPaperDetail> paperDetails = new ArrayList<>();
@@ -152,19 +152,20 @@ public class PaperService {
 
         return responses;
     }
+
     public List<PaperResponse> getAll() {
         return paperRepository.findAll().stream().map(PaperResponse::fromPaper).toList();
     }
-
 
     private Double calculatePrice(String paperType, Long quantity) {
         final double A4_PRICE = 200.0;
         return switch (paperType.toUpperCase()) {
             case "A4" -> A4_PRICE * quantity;
-            case "A3" -> (A4_PRICE * 2) * quantity;  // A3 costs twice as much as A4
+            case "A3" -> (A4_PRICE * 2) * quantity; // A3 costs twice as much as A4
             default -> throw new IllegalArgumentException("Invalid paper type. Must be either A3 or A4");
         };
     }
+
     public String delete(Long id) {
         Paper paper = paperRepository.findById(id).orElse(null);
         if (paper == null) {

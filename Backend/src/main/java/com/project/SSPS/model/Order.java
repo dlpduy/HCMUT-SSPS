@@ -20,5 +20,17 @@ public class Order extends BaseEntity {
     @Column(name = "total_price")
     private Double totalPrice;
 
-    private LocalDateTime time;
+    private LocalDateTime createAt;
+    private LocalDateTime updateAt;
+
+    @PrePersist
+    public void prePersist() {
+        createAt = LocalDateTime.now();
+        updateAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        updateAt = LocalDateTime.now();
+    }
 }

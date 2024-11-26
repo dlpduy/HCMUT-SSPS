@@ -5,5 +5,5 @@ import com.project.SSPS.model.Order;
 import java.util.List;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
-    List<Order> findByStudentIdOrderByTimeDesc(Long studentId);
+    List<Order> findByStudentIdOrderByCreateAtDesc(Long id);
 }

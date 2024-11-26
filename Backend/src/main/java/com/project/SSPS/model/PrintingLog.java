@@ -52,11 +52,16 @@ public class PrintingLog {
     private Long numPages;
 
     @NotNull(message = "Time is mandatory")
-    @Column(name = "time", nullable = false)
-    private LocalDateTime time;
+    @Column(name = "create_at", nullable = false)
+    private LocalDateTime createAt;
 
     public enum Sided {
         Single,
         Double
+    }
+
+    @PrePersist
+    public void prePersist() {
+        createAt = LocalDateTime.now();
     }
 }

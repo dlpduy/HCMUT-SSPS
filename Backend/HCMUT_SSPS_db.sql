@@ -13,7 +13,8 @@ CREATE TABLE IF NOT EXISTS users (
     phone VARCHAR(10),
     address VARCHAR(100),
     role ENUM("STUDENT", "SPSO") default "STUDENT",
-    creation_date DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL
+    create_at DATETIME NOT NULL,
+    update_at DATETIME NOT NULL
 );
 
 -- Bo Student and SPSO table
@@ -80,14 +81,14 @@ CREATE TABLE IF NOT EXISTS printing_logs ( -- one record is a service using hist
 	sided			ENUM('Single', 'Double')					NOT NULL,
 	printing_pages  VARCHAR(100)								NOT NULL, -- format: "be-en" or "p1, p2, p3,..."
 	num_pages		INT											NOT NULL, -- equals 2*num_sheet if double-sided, else num_sheet 
-	time			DATETIME									NOT NULL,
+	create_at		DATETIME									NOT NULL,
 
 
 	FOREIGN KEY (file_id) references files(id),
 	FOREIGN KEY (printer_id) REFERENCES printers(id), 
 	FOREIGN KEY (paper_type) REFERENCES papers(type),
 	
-	UNIQUE (file_id, time) 
+	UNIQUE (file_id, create_at) 
 );
 
 -- DROP TABLE IF EXISTS Student_Papers;

@@ -8,7 +8,8 @@ import java.util.List;
 public class OrderHistoryResponse {
     private Long orderId;
     private Double totalPrice;
-    private LocalDateTime time;
+    private LocalDateTime createAt;
+    private LocalDateTime updateAt;
     private List<OrderPaperDetail> papers;
 
     @Data
