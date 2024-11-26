@@ -110,7 +110,9 @@ CREATE TABLE IF NOT EXISTS orders (
 	id				INT				AUTO_INCREMENT				PRIMARY KEY,
 	student_id		INT											NOT NULL,
 	total_price		DECIMAL(10,2)								NOT NULL,
-	time			DATETIME									NOT NULL,
+	status			ENUM('Pending', 'Processing', 'Completed')	NOT NULL,
+	create_at		DATETIME									NOT NULL,
+	update_at		DATETIME									NOT NULL,
 
 
 FOREIGN KEY (student_id) REFERENCES users(id) );
@@ -121,6 +123,8 @@ CREATE TABLE IF NOT EXISTS order_papers ( -- since one order can have multiple p
 	order_id		INT											NOT NULL,
 	paper_type		VARCHAR(4)									NOT NULL,
 	quantity		INT											NOT NULL,
+	create_at		DATETIME									NOT NULL,
+	update_at		DATETIME									NOT NULL,
 
 
 FOREIGN KEY (order_id) REFERENCES orders (id),
