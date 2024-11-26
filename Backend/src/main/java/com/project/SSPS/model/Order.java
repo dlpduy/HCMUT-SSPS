@@ -18,7 +18,7 @@ public class Order extends BaseEntity {
     private Long studentId;
 
     @Column(name = "total_price")
-    private Double totalPrice;
+    private Long totalPrice;
 
     private LocalDateTime time;
 }

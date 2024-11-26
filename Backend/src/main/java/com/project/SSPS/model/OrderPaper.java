@@ -20,4 +20,8 @@ public class OrderPaper extends BaseEntity {
     private String paperType;
 
     private Long quantity;
+
+    @ManyToOne
+    @JoinColumn(name = "paper_type", referencedColumnName = "type", insertable = false, updatable = false)
+    private Paper paper;
 }

@@ -26,8 +26,12 @@ public class StudentController {
     // Buy pages for a student
     @PostMapping("page/{id}")
     public ResponseEntity<?> buyPages(@PathVariable("id") Long studentId, @RequestBody BuyPageDTO request) {
-        paperService.buyPages(studentId, request);
-        return ResponseEntity.ok().build();
+        try {
+            paperService.buyPages(studentId, request);
+            return ResponseEntity.ok("Pages bought successfully");
+        } catch (Exception e) {
+            return GlobalException.handleException(e);
+        }
     }
 
     // Get page left
