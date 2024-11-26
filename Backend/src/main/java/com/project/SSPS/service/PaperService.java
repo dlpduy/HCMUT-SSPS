@@ -3,17 +3,14 @@ package com.project.SSPS.service;
 import com.project.SSPS.dto.*;
 import com.project.SSPS.model.*;
 import com.project.SSPS.repository.*;
+import com.project.SSPS.response.BuyPageResponse;
+import com.project.SSPS.response.CreatePaymentBuyResponse;
 import com.project.SSPS.response.OrderHistoryResponse;
 import com.project.SSPS.response.PageResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.springframework.stereotype.Service;
-
 import com.project.SSPS.model.Paper;
 import com.project.SSPS.repository.PaperRepository;
 import com.project.SSPS.response.PaperResponse;
@@ -29,6 +26,7 @@ public class PaperService {
     private final OrderPaperRepository orderPaperRepository;
     private final HttpServletRequest httpServletRequest;
     private final StudentPaperRepository studentPaperRepository;
+    private final PaymentService paymentService;
 
     public PaperService(UserService userService,
             JwtService jwtService,
@@ -36,7 +34,7 @@ public class PaperService {
             OrderRepository orderRepository,
             OrderPaperRepository orderPaperRepository,
             HttpServletRequest httpServletRequest,
-            StudentPaperRepository studentPaperRepository, StudentPaperRepository studentPaperRepository1) {
+            StudentPaperRepository studentPaperRepository, PaymentService paymentService) {
         this.userService = userService;
         this.jwtService = jwtService;
         this.paperRepository = paperRepository;
@@ -44,36 +42,45 @@ public class PaperService {
         this.orderPaperRepository = orderPaperRepository;
         this.httpServletRequest = httpServletRequest;
         this.studentPaperRepository = studentPaperRepository;
+        this.paymentService = paymentService;
+    }
+
+    public CreatePaymentBuyResponse createPayment(BuyPageDTO buyPageDTO, HttpServletRequest request) {
+        if (!paperRepository.existsByType(buyPageDTO.getPaperType())) {
+            throw new RuntimeException("Paper type not found");
+        }
+        String token = request.getHeader("Authorization").replace("Bearer ", "");
+        Long studentId = userService.getUserbyUsername(jwtService.extractUsername(token)).getId();
+        String paperType = buyPageDTO.getPaperType();
+        Long quantity = buyPageDTO.getQuantity();
+        Long totalPrice = buyPageDTO.getQuantity() * paperRepository.findByType(buyPageDTO.getPaperType()).getPrice();
+        String paymentUrl = paymentService.createVnPayPayment(request, totalPrice, studentId, paperType, quantity);
+        return new CreatePaymentBuyResponse(studentId, totalPrice, paymentUrl);
     }
 
     @Transactional
-    public void buyPages(Long studentId, BuyPageDTO request) {
-        if (!paperRepository.existsByType(request.getPaperType())) {
-            throw new RuntimeException("Paper type not found");
-        }
+    public void buyPages(Long studentId, String paperType, Long quantity) {
 
         Order order = new Order();
         order.setStudentId(studentId);
-        order.setTime(LocalDateTime.now());
-        order.setTotalPrice(request.getQuantity() * paperRepository.findByType(request.getPaperType()).getPrice());
+        order.setTotalPrice(paperRepository.findByType(paperType).getPrice() * quantity);
         orderRepository.save(order);
 
         OrderPaper orderPaper = new OrderPaper();
         orderPaper.setOrderId(order.getId());
-        orderPaper.setPaperType(request.getPaperType());
-        orderPaper.setQuantity(request.getQuantity());
+        orderPaper.setPaperType(paperType);
+        orderPaper.setQuantity(quantity);
         orderPaperRepository.save(orderPaper);
 
-        StudentPaper studentPaper = studentPaperRepository.findByStudentIdAndPaperType(studentId,
-                request.getPaperType());
+        StudentPaper studentPaper = studentPaperRepository.findByStudentIdAndPaperType(studentId, paperType);
 
         if (studentPaper == null) {
             studentPaper = new StudentPaper();
             studentPaper.setStudentId(studentId);
-            studentPaper.setPaperType(request.getPaperType());
-            studentPaper.setQuantity(request.getQuantity());
+            studentPaper.setPaperType(paperType);
+            studentPaper.setQuantity(quantity);
         } else {
-            studentPaper.setQuantity(studentPaper.getQuantity() + request.getQuantity());
+            studentPaper.setQuantity(studentPaper.getQuantity() + quantity);
         }
         studentPaperRepository.save(studentPaper);
     }
@@ -131,14 +138,13 @@ public class PaperService {
     }
 
     public List<OrderHistoryResponse> getPageBuyingHistory(Long studentId) {
-        List<Order> orders = orderRepository.findByStudentIdOrderByTimeDesc(studentId);
+        List<Order> orders = orderRepository.findByStudentIdOrderByCreatedAtDesc(studentId);
         List<OrderHistoryResponse> responses = new ArrayList<>();
 
         for (Order order : orders) {
             OrderHistoryResponse response = new OrderHistoryResponse();
             response.setOrderId(order.getId());
             response.setTotalPrice(order.getTotalPrice());
-            response.setTime(order.getTime());
 
             List<OrderPaper> orderPapers = orderPaperRepository.findByOrderId(order.getId());
             List<OrderHistoryResponse.OrderPaperDetail> paperDetails = new ArrayList<>();

@@ -20,5 +20,4 @@ public class Order extends BaseEntity {
     @Column(name = "total_price")
     private Long totalPrice;
 
-    private LocalDateTime time;
 }
