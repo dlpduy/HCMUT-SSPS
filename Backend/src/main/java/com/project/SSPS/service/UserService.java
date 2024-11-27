@@ -27,6 +27,10 @@ public class UserService {
         return this.userRepository.findByUsername(username).orElse(null);
     }
 
+    public User getUserbyUsernameAndCodeVerify(String username, String codeVerify) {
+        return this.userRepository.findByUsernameAndCodeVerify(username, codeVerify).orElse(null);
+    }
+
     public boolean checkUserExists(String username) {
         return this.userRepository.existsByUsername(username);
     }
