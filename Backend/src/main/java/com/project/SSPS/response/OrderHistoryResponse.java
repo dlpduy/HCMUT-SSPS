@@ -7,7 +7,7 @@ import java.util.List;
 @Data
 public class OrderHistoryResponse {
     private Long orderId;
-    private Double totalPrice;
+    private Long totalPrice;
     private LocalDateTime time;
     private List<OrderPaperDetail> papers;
 

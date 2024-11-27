@@ -6,4 +6,6 @@ import com.project.SSPS.model.Paper;
 
 public interface PaperRepository extends JpaRepository<Paper, Long> {
     boolean existsByType(String type);
+
+    Paper findByType(String type);
 }
