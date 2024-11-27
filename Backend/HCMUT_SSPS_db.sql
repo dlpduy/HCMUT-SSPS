@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS users (
     password VARCHAR(65) NOT NULL, -- hashed password
     phone VARCHAR(10),
     address VARCHAR(100),
-    role ENUM("STUDENT", "SPSO") default "STUDENT",
+    role ENUM('STUDENT', 'SPSO') default 'STUDENT',
     creation_date DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 

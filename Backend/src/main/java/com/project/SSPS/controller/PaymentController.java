@@ -4,10 +4,13 @@ import com.project.SSPS.dto.PaymentDTO;
 import com.project.SSPS.response.ResponseObject;
 import com.project.SSPS.service.PaperService;
 import com.project.SSPS.service.PaymentService;
+import com.project.SSPS.util.annotation.ApiMessage;
+import com.project.SSPS.util.errors.GlobalException;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.method.P;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +26,6 @@ import org.springframework.web.bind.annotation.*;
 // Mật khẩu OTP 123456
 public class PaymentController {
     private final PaperService paperService;
-    private final PaymentService paymentService;
 
     // @GetMapping("/vn-pay")
     // public ResponseObject<PaymentDTO.VNPayResponse> pay(HttpServletRequest
@@ -32,27 +34,19 @@ public class PaymentController {
     // paymentService.createVnPayPayment(request));
     // }
     @GetMapping("/vn-pay-callback")
-    public ResponseObject<PaymentDTO.VNPayResponse> payCallbackHandler(HttpServletRequest request) {
-        String vnp_OrderInfo = request.getParameter("vnp_OrderInfo");
-        if (vnp_OrderInfo == null) {
-            return new ResponseObject<>(HttpStatus.BAD_REQUEST, "Failed", null);
-        }
-        String[] parts = vnp_OrderInfo.split("-");
-        Long studentId = Long.parseLong(parts[0]); // Convert the first part to Long
-        String paperType = parts[1]; // Second part as String
-        Long quantity = Long.parseLong(parts[2]);
-
-        if (paymentService.isTransactionProcessed(request.getParameter("vnp_TxnRef"))) {
-            return new ResponseObject<>(HttpStatus.CONFLICT, "Transaction already processed", null);
-        }
-
-        String status = request.getParameter("vnp_ResponseCode");
-        if (status.equals("00")) {
-            paperService.buyPages(studentId, paperType, quantity);
-            paymentService.markTransactionAsProcessed(request.getParameter("vnp_TxnRef"));
-            return new ResponseObject<>(HttpStatus.OK, "Success", new PaymentDTO.VNPayResponse("00", "Success"));
-        } else {
-            return new ResponseObject<>(HttpStatus.BAD_REQUEST, "Failed", null);
+    @ApiMessage("Payment callback")
+    public ResponseEntity<?> payCallbackHandler(HttpServletRequest request) {
+        try {
+            String status = request.getParameter("vnp_ResponseCode");
+            if (status.equals("00")) {
+                paperService.buyPages(request);
+                return new ResponseObject<>(HttpStatus.OK, "Success",
+                        new PaymentDTO.VNPayResponse("00", "Buy page(s) successfully"));
+            } else {
+                return new ResponseObject<>(HttpStatus.BAD_REQUEST, "Failed", null);
+            }
+        } catch (Exception e) {
+            return GlobalException.handleException(e);
         }
     }
 }
