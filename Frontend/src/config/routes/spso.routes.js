@@ -3,7 +3,7 @@ import Dashboard from '../../page/private/spso/Dashboard';
 import ConfigSystem from '../../page/private/spso/ConfigSystem';
 import PrinterManagement from './../../page/private/spso/PrinterManagement/index';
 import StudentPrintingHistory from '../../page/private/spso/StudentPrintingHistory';
-import BuyPaperHistory from './../../page/private/spso/BuyPaperHistory/index';
+import PurchasePaperHistory from './../../page/private/spso/PurchasePaperHistory/index';
 
 const spsoRouter = { 
     path: "spso",
@@ -26,8 +26,8 @@ const spsoRouter = {
         Component: StudentPrintingHistory,
       },
       {
-        subPath: "buy-paper-history",
-        Component: BuyPaperHistory,
+        subPath: "purchase-paper-history",
+        Component: PurchasePaperHistory,
       },
       {
         subPath: "", 
