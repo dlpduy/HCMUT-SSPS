@@ -16,4 +16,7 @@ public class BaseResponse {
 
     @JsonProperty("updated_at")
     private LocalDateTime updatedAt;
+
+    public BaseResponse(boolean b, String printJobSubmittedSuccessfully) {
+    }
 }

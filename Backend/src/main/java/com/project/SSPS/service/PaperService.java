@@ -3,6 +3,7 @@ package com.project.SSPS.service;
 import com.project.SSPS.dto.*;
 import com.project.SSPS.model.*;
 import com.project.SSPS.repository.*;
+import com.project.SSPS.response.FileResponse;
 import com.project.SSPS.response.OrderHistoryResponse;
 import com.project.SSPS.response.PageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +28,12 @@ public class PaperService {
     private final JwtService jwtService;
     private final PaperRepository paperRepository;
     private final OrderRepository orderRepository;
-    private final  OrderPaperRepository orderPaperRepository;
+    private final OrderPaperRepository orderPaperRepository;
     private final HttpServletRequest httpServletRequest;
     private final StudentPaperRepository studentPaperRepository;
+    private final PrintingLogRepository printingLogRepository;
+    private final PrinterRepository printerRepository;
+    private final FileRepository fileRepository;
 
     public PaperService(UserService userService,
                         JwtService jwtService,
@@ -37,7 +41,10 @@ public class PaperService {
                         OrderRepository orderRepository,
                         OrderPaperRepository orderPaperRepository,
                         HttpServletRequest httpServletRequest,
-                        StudentPaperRepository studentPaperRepository, StudentPaperRepository studentPaperRepository1
+                        StudentPaperRepository studentPaperRepository,
+                        PrinterRepository printerRepository,
+                        PrintingLogRepository printingLogRepository,
+                        FileRepository fileRepository
     ) {
         this.userService = userService;
         this.jwtService = jwtService;
@@ -46,32 +53,13 @@ public class PaperService {
         this.orderPaperRepository = orderPaperRepository;
         this.httpServletRequest = httpServletRequest;
         this.studentPaperRepository = studentPaperRepository;
+        this.printerRepository = printerRepository;
+        this.printingLogRepository = printingLogRepository;
+        this.fileRepository = fileRepository;
     }
     @Transactional
     public void buyPages(Long studentId, BuyPageDTO request) {
-        Order order = new Order();
-        order.setStudentId(studentId);
-        order.setTime(LocalDateTime.now());
-        order.setTotalPrice(calculatePrice(request.getPaperType(), request.getQuantity()));
-        orderRepository.save(order);
 
-        OrderPaper orderPaper = new OrderPaper();
-        orderPaper.setOrderId(order.getId());
-        orderPaper.setPaperType(request.getPaperType());
-        orderPaper.setQuantity(request.getQuantity());
-        orderPaperRepository.save(orderPaper);
-
-        StudentPaper studentPaper = studentPaperRepository.findByStudentIdAndPaperType(studentId, request.getPaperType());
-
-        if (studentPaper == null) {
-            studentPaper = new StudentPaper();
-            studentPaper.setStudentId(studentId);
-            studentPaper.setPaperType(request.getPaperType());
-            studentPaper.setQuantity(request.getQuantity());
-        } else {
-            studentPaper.setQuantity(studentPaper.getQuantity() + request.getQuantity());
-        }
-        studentPaperRepository.save(studentPaper);
     }
 
     public PaperResponse create(PaperDTO paperDTO, HttpServletRequest request) {
@@ -156,15 +144,67 @@ public class PaperService {
         return paperRepository.findAll().stream().map(PaperResponse::fromPaper).toList();
     }
 
+    // POST api/v1/student/print
+    public void printDocument(PrintRequestDTO request, HttpServletRequest httpRequest) {
+        // Get user id from token
+        String token = httpRequest.getHeader("Authorization").replace("Bearer ", "");
+        Long studentId = jwtService.extractUserId(token);
 
-    private Double calculatePrice(String paperType, Long quantity) {
-        final double A4_PRICE = 200.0;
-        return switch (paperType.toUpperCase()) {
-            case "A4" -> A4_PRICE * quantity;
-            case "A3" -> (A4_PRICE * 2) * quantity;  // A3 costs twice as much as A4
-            default -> throw new IllegalArgumentException("Invalid paper type. Must be either A3 or A4");
-        };
+        Printer printer = printerRepository.findById(request.getPrinterId())
+                .orElseThrow(() -> new RuntimeException("Printer not found"));
+
+        Paper paper = paperRepository.findByType(request.getPaperType())
+                .orElseThrow(() -> new RuntimeException("Invalid paper type"));
+
+        File file = fileRepository.findById(request.getFileId())
+                .orElseThrow(() -> new RuntimeException("File not found"));
+
+        StudentPaper studentPaper = studentPaperRepository
+                .findByStudentIdAndPaperType(studentId, request.getPaperType());
+
+        if (studentPaper == null || studentPaper.getQuantity() < request.getNumPages()) {
+            throw new RuntimeException("Insufficient pages available");
+        }
+
+        if (request.getPrintingPages().isEmpty() || request.getPrintingPages().length() > 100) {
+            throw new RuntimeException("Invalid printing pages format");
+        }
+
+        PrintingLog printingLog = new PrintingLog();
+        printingLog.setPrinter(printer);
+        printingLog.setPaper(paper);
+        printingLog.setFile(file);
+        printingLog.setNumCopy(request.getNumCopy());
+        printingLog.setSided(request.getSided());
+        printingLog.setPrintingPages(request.getPrintingPages());
+        printingLog.setNumPages(request.getNumPages());
+        printingLog.setTime(LocalDateTime.now());
+
+        printingLogRepository.save(printingLog);
+
+        studentPaper.setQuantity(studentPaper.getQuantity() - request.getNumPages());
+        studentPaperRepository.save(studentPaper);
     }
+
+    public FileResponse createFile(FileDTO fileDTO, HttpServletRequest request) {
+        String token = request.getHeader("Authorization").replace("Bearer ", "");
+        Long userId = jwtService.extractUserId(token);
+
+        User student = userService.findById(userId);
+
+        File file = new File();
+        file.setFileName(fileDTO.getFileName());
+        file.setFileType(fileDTO.getFileType());
+        file.setStudent(student);
+
+        file = fileRepository.save(file);
+
+        FileResponse response = new FileResponse();
+        response.setFileName(file.getFileName());
+        response.setFileType(file.getFileType());
+        return response;
+    }
+
     public String delete(Long id) {
         Paper paper = paperRepository.findById(id).orElse(null);
         if (paper == null) {
