@@ -100,4 +100,13 @@ public class SpsoService implements ISpsoService {
         return new PaymentLogsListResponse(paymentLogsResponses, orderPapers.getTotalPages());
     }
 
+    @Override
+    public StatisticResponse getStatistic() {
+//        long totalPrintingLogs = printingLogRepository.countPrintingLogs();
+        //nOrderPaper = nPaymentLogs
+        Long totalPurchasing = orderPaperRepository.countOrderPapers();
+        Long totalPrinting = printingLogRepository.countPrintingLog();
+        return new StatisticResponse(totalPrinting, totalPurchasing);
+    }
+
 }
