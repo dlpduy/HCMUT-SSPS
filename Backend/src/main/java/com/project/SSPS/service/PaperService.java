@@ -7,13 +7,15 @@ import com.project.SSPS.response.BuyPageResponse;
 import com.project.SSPS.response.CreatePaymentBuyResponse;
 import com.project.SSPS.response.OrderHistoryResponse;
 import com.project.SSPS.response.PageResponse;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import com.project.SSPS.model.Paper;
-import com.project.SSPS.repository.PaperRepository;
+
 import com.project.SSPS.response.PaperResponse;
+import com.project.SSPS.response.ResponseObject;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -59,7 +61,18 @@ public class PaperService {
     }
 
     @Transactional
-    public void buyPages(Long studentId, String paperType, Long quantity) {
+    public void buyPages(HttpServletRequest request) {
+        if (paymentService.isTransactionProcessed(request.getParameter("vnp_TxnRef"))) {
+            throw new RuntimeException("Transaction already processed");
+        }
+        String vnp_OrderInfo = request.getParameter("vnp_OrderInfo");
+        if (vnp_OrderInfo == null) {
+            throw new RuntimeException("Order info not found");
+        }
+        String[] parts = vnp_OrderInfo.split("-");
+        Long studentId = Long.parseLong(parts[0]); // Convert the first part to Long
+        String paperType = parts[1]; // Second part as String
+        Long quantity = Long.parseLong(parts[2]);
 
         Order order = new Order();
         order.setStudentId(studentId);
@@ -83,6 +96,7 @@ public class PaperService {
             studentPaper.setQuantity(studentPaper.getQuantity() + quantity);
         }
         studentPaperRepository.save(studentPaper);
+        paymentService.markTransactionAsProcessed(request.getParameter("vnp_TxnRef"));
     }
 
     public PaperResponse create(PaperDTO paperDTO, HttpServletRequest request) {
