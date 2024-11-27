@@ -1,5 +1,8 @@
 package com.project.SSPS.service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,5 +30,11 @@ public class EmailService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public String changeFormatDay(LocalDateTime input) {
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDate = input.format(outputFormatter);
+        return formattedDate;
     }
 }

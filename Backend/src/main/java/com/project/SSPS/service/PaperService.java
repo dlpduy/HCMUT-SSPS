@@ -16,8 +16,10 @@ import java.util.List;
 
 import com.project.SSPS.response.PaperResponse;
 import com.project.SSPS.response.ResponseObject;
+import com.project.SSPS.response.RestResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Service
 public class PaperService {
@@ -58,12 +60,11 @@ public class PaperService {
         Long quantity = buyPageDTO.getQuantity();
         Long totalPrice = buyPageDTO.getQuantity() * paperRepository.findByType(buyPageDTO.getPaperType()).getPrice();
         String paymentUrl = paymentService.createVnPayPayment(request, totalPrice, studentId, paperType, quantity);
-        this.emailService.sendEmail(new EmailDTO("dinhlephucduy@gmail.com", "Buy page", "Buy page"));
         return new CreatePaymentBuyResponse(studentId, totalPrice, paymentUrl);
     }
 
     @Transactional
-    public void buyPages(HttpServletRequest request) {
+    public RestResponse<Object> buyPages(HttpServletRequest request) {
         if (paymentService.isTransactionProcessed(request.getParameter("vnp_TxnRef"))) {
             throw new RuntimeException("Transaction already processed");
         }
@@ -88,6 +89,28 @@ public class PaperService {
         orderPaperRepository.save(orderPaper);
 
         StudentPaper studentPaper = studentPaperRepository.findByStudentIdAndPaperType(studentId, paperType);
+        User currentUser = userService.findById(studentId);
+        EmailDTO emailDTO = new EmailDTO();
+        emailDTO.setToEmail(currentUser.getUsername());
+        emailDTO.setSubject("[HCMUT - Student Smart Printing Service] Order confirmation");
+        // emailDTO.setBody("Your order has been confirmed. You have bought " + quantity
+        // + " pages of " + paperType + " paper.");
+        emailDTO.setBody("Dear " + currentUser.getFullName() + ",\n\n"
+                + "We are pleased to inform you that your payment for the order has been successfully processed.\n\n"
+                + "Your order details are as follows:\n\n"
+                + "Order ID: " + order.getId() + "\n"
+                + "Order Date: " + emailService.changeFormatDay(order.getCreatedAt()) + "\n"
+                + "Items Ordered:" + paperType + "\n"
+                + "Quantity:" + quantity + "\n"
+                + "Total Amount: " + order.getTotalPrice() + " VND" + "\n"
+                + "Your inventory has been updated. Please review the details and let us know if you notice any discrepancies. Should you have any questions or concerns, feel free to contact us.\n\n"
+
+                + "Best regards,\n"
+                + "The L04 Group 2 team\n\n"
+                + "Please contact us in the following ways:\n"
+                + "Email: " + "spsohcmut@gmail.com\n"
+                + "Tel: 0999998386\n"
+                + "Address: 268, Ly Thuong Kiet, Ward 14, District 10, HCM City.\n");
 
         if (studentPaper == null) {
             studentPaper = new StudentPaper();
@@ -99,6 +122,9 @@ public class PaperService {
         }
         studentPaperRepository.save(studentPaper);
         paymentService.markTransactionAsProcessed(request.getParameter("vnp_TxnRef"));
+        this.emailService.sendEmail(emailDTO);
+
+        return new RestResponse<>(HttpServletResponse.SC_OK, null, "Payment Successful", null);
     }
 
     public PaperResponse create(PaperDTO paperDTO, HttpServletRequest request) {

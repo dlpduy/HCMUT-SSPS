@@ -2,12 +2,14 @@ package com.project.SSPS.controller;
 
 import com.project.SSPS.dto.PaymentDTO;
 import com.project.SSPS.response.ResponseObject;
+import com.project.SSPS.response.RestResponse;
 import com.project.SSPS.service.PaperService;
 import com.project.SSPS.service.PaymentService;
 import com.project.SSPS.util.annotation.ApiMessage;
 import com.project.SSPS.util.errors.GlobalException;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,9 +41,7 @@ public class PaymentController {
         try {
             String status = request.getParameter("vnp_ResponseCode");
             if (status.equals("00")) {
-                paperService.buyPages(request);
-                return new ResponseObject<>(HttpStatus.OK, "Success",
-                        new PaymentDTO.VNPayResponse("00", "Buy page(s) successfully"));
+                return ResponseEntity.ok(paperService.buyPages(request));
             } else {
                 return new ResponseObject<>(HttpStatus.BAD_REQUEST, "Failed", null);
             }
