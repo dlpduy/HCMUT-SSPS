@@ -51,19 +51,9 @@ public class SecurityConfiguration {
                         authz -> authz
                                 .requestMatchers(HttpMethod.POST, "/api/v1/auth/register").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
-<<<<<<< HEAD
-<<<<<<< HEAD
-                                .requestMatchers("/api/v1/student/*").hasAnyAuthority("STUDENT")
-                                .requestMatchers("/api/v1/spso/*").hasAnyAuthority("SPSO")
-=======
-                                .requestMatchers(HttpMethod.GET, "/student").hasAnyAuthority("STUDENT")
-                                .requestMatchers(HttpMethod.GET, "/spso").hasAnyAuthority("SPSO")
->>>>>>> c70b609b39bb0340e48aa3c8cd17b7bc9c2198cf
-=======
                                 .requestMatchers("/api/v1/payment/vn-pay-callback").permitAll()
                                 .requestMatchers("/api/v1/student/**").hasAnyAuthority("STUDENT")
                                 .requestMatchers("/api/v1/spso/**").hasAnyAuthority("SPSO")
->>>>>>> 617a481e2d88516b89394c482a1f99733b2d8837
 
                                 .anyRequest().authenticated())
                 .userDetailsService(userDetailCustom)
