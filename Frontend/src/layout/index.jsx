@@ -4,7 +4,6 @@ import { Layout, notification } from "antd";
 import Cookies from "js-cookie";
 import HeaderPage from "./Header";
 import { MyContext } from "../config/context";
-import "react-toastify/dist/ReactToastify.css";
 
 const { Header, Content } = Layout;
 
@@ -19,8 +18,6 @@ const LayoutPage = () => {
       description: placement,
     });
   };
-
-  console.log(role);
   return (
     <MyContext.Provider value={{ setRole, openNotification }}>
       <Layout className="min-h-screen w-full h-screen">
