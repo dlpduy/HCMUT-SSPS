@@ -1,8 +1,10 @@
 package com.project.SSPS.service;
 
 import com.project.SSPS.dto.PrinterDTO;
+import com.project.SSPS.model.OrderPaper;
 import com.project.SSPS.model.Printer;
 import com.project.SSPS.model.PrintingLog;
+import com.project.SSPS.repository.OrderPaperRepository;
 import com.project.SSPS.repository.PrinterRepository;
 import com.project.SSPS.repository.PrintingLogRepository;
 import com.project.SSPS.response.*;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 public class SpsoService implements ISpsoService {
     private final PrinterRepository printerRepository;
     private final PrintingLogRepository printingLogRepository;
+    private final OrderPaperRepository orderPaperRepository;
     @Override
     public SpsoResponse findSpsoInfo(Long id) {
         return null;
@@ -83,9 +86,18 @@ public class SpsoService implements ISpsoService {
     }
 
     @Override
-    public Page<PrintingLogResponse> getAllPrintRequests(PageRequest pageRequest) {
+    public Page<PrintingLogResponse> getAllPrintingLogs(PageRequest pageRequest) {
         Page<PrintingLog>  printingLogs = printingLogRepository.findAll(pageRequest);
         return printingLogs.map(PrintingLogResponse::fromPrintingLog);
+    }
+
+    @Override
+    public PaymentLogsListResponse getAllPaymentLogs(PageRequest pageRequest) {
+        Page<OrderPaper> orderPapers = orderPaperRepository.findAll(pageRequest);
+        List<PaymentLogsResponse> paymentLogsResponses = orderPapers.stream()
+                .map(orderPaper -> PaymentLogsResponse.fromOrderPaper(orderPaper, orderPaper.getOrder()))
+                .collect(Collectors.toList());
+        return new PaymentLogsListResponse(paymentLogsResponses, orderPapers.getTotalPages());
     }
 
 }

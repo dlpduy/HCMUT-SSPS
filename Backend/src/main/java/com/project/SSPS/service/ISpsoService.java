@@ -21,6 +21,7 @@ public interface ISpsoService {
 
     Void deletePrinter(Long id) throws Exception;
 
-    Page<PrintingLogResponse> getAllPrintRequests(PageRequest pageRequest);
+    Page<PrintingLogResponse> getAllPrintingLogs(PageRequest pageRequest);
 
+    PaymentLogsListResponse getAllPaymentLogs(PageRequest pageRequest);
 }

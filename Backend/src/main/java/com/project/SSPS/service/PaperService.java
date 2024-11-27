@@ -80,7 +80,7 @@ public class PaperService {
         orderRepository.save(order);
 
         OrderPaper orderPaper = new OrderPaper();
-        orderPaper.setOrderId(order.getId());
+        orderPaper.setOrder(order);
         orderPaper.setPaperType(paperType);
         orderPaper.setQuantity(quantity);
         orderPaperRepository.save(orderPaper);
