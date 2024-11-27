@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS users (
     phone VARCHAR(10),
     address VARCHAR(100),
     role ENUM('STUDENT', 'SPSO') default 'STUDENT',
+    code_verify VARCHAR(6),
     creation_date DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 

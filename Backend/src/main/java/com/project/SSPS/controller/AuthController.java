@@ -49,4 +49,14 @@ public class AuthController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/forgot-password")
+    @ApiMessage("Forgot password successfully")
+    public ResponseEntity<?> forgotPassword(@RequestBody String email) {
+        try {
+            return (ResponseEntity.ok().body("Forgot password successfully"));
+        } catch (Exception e) {
+            return GlobalException.handleException(e);
+        }
+    }
+
 }

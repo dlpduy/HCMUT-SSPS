@@ -26,9 +26,9 @@ public class PaperService {
     private final PaperRepository paperRepository;
     private final OrderRepository orderRepository;
     private final OrderPaperRepository orderPaperRepository;
-    private final HttpServletRequest httpServletRequest;
     private final StudentPaperRepository studentPaperRepository;
     private final PaymentService paymentService;
+    private final EmailService emailService;
 
     public PaperService(UserService userService,
             JwtService jwtService,
@@ -36,15 +36,16 @@ public class PaperService {
             OrderRepository orderRepository,
             OrderPaperRepository orderPaperRepository,
             HttpServletRequest httpServletRequest,
-            StudentPaperRepository studentPaperRepository, PaymentService paymentService) {
+            StudentPaperRepository studentPaperRepository, PaymentService paymentService,
+            EmailService emailService) {
         this.userService = userService;
         this.jwtService = jwtService;
         this.paperRepository = paperRepository;
         this.orderRepository = orderRepository;
         this.orderPaperRepository = orderPaperRepository;
-        this.httpServletRequest = httpServletRequest;
         this.studentPaperRepository = studentPaperRepository;
         this.paymentService = paymentService;
+        this.emailService = emailService;
     }
 
     public CreatePaymentBuyResponse createPayment(BuyPageDTO buyPageDTO, HttpServletRequest request) {
@@ -57,6 +58,7 @@ public class PaperService {
         Long quantity = buyPageDTO.getQuantity();
         Long totalPrice = buyPageDTO.getQuantity() * paperRepository.findByType(buyPageDTO.getPaperType()).getPrice();
         String paymentUrl = paymentService.createVnPayPayment(request, totalPrice, studentId, paperType, quantity);
+        this.emailService.sendEmail(new EmailDTO("dinhlephucduy@gmail.com", "Buy page", "Buy page"));
         return new CreatePaymentBuyResponse(studentId, totalPrice, paymentUrl);
     }
 
