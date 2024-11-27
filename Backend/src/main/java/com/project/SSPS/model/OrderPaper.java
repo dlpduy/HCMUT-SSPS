@@ -13,8 +13,9 @@ public class OrderPaper extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "order_id")
-    private Long orderId;
+    @OneToOne
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
+    private Order order;
 
     @Column(name = "paper_type")
     private String paperType;
