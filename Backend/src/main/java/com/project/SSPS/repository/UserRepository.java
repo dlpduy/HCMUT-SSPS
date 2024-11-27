@@ -13,6 +13,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User save(User user);
 
+    Optional<User> findByUsernameAndCodeVerify(String username, String codeVerify);
+
     Optional<User> findByUsername(String username);
 
     boolean existsByUsername(String username);

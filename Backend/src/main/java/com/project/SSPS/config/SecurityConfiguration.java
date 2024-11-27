@@ -51,10 +51,12 @@ public class SecurityConfiguration {
                         authz -> authz
                                 .requestMatchers(HttpMethod.POST, "/api/v1/auth/register").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/v1/auth/forgot-password").permitAll()
+                                .requestMatchers(HttpMethod.PUT, "/api/v1/auth/update-password").permitAll()
                                 .requestMatchers("/api/v1/payment/vn-pay-callback").permitAll()
+
                                 .requestMatchers("/api/v1/student/**").hasAnyAuthority("STUDENT")
                                 .requestMatchers("/api/v1/spso/**").hasAnyAuthority("SPSO")
-
 
                                 .anyRequest().authenticated())
                 .userDetailsService(userDetailCustom)
