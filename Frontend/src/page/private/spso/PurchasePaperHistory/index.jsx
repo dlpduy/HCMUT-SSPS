@@ -1,93 +1,74 @@
-import { Table } from "antd";
-
+import { useState, useEffect } from "react";
+import { Table, Pagination } from "antd";
+import { getAllPagePurchaseHistory } from "../../../../api/spso";
 const PurchasePaperHistory = () => {
   // Định nghĩa cột cho bảng
+
+  const [purchaseHistList, setPurchaseHistList] = useState([]);
+  const [page, setPage] = useState(0);
+
+  useEffect(() => {
+    getAllPagePurchaseHistory({ page: page }).then((res) => setPurchaseHistList(res.data));
+  }, [page]);
+
   const columns = [
     {
-      title: "Người mua",
-      dataIndex: "buyer",
-      key: "buyer",
+      title: "Mã số sinh viên",
+      dataIndex: "studentId",
+      width: "10%",
     },
     {
-      title: "Loại giấy in",
+      title: "Ngày giao dịch",
+      dataIndex: "paymentDateTime",
+      render: (value) => {
+        const date = new Date(value);
+        return `${String(date.getHours())}:${String(date.getMinutes())} ${String(date.getDate())} - ${String(date.getMonth() + 1)} - ${date.getFullYear()}`;
+      },
+      width: "15%",
+    },
+    {
+      title: "Mã giao dịch",
+      dataIndex: "paymentLogsId",
+      width: "10%",
+    },
+    {
+      title: "Loại giấy",
       dataIndex: "paperType",
-      key: "paperType",
+      width: "10%",
     },
     {
-      title: "Ngày mua",
-      dataIndex: "buyDate",
-      key: "butDate",
+      title: "Đơn giá",
+      dataIndex: "unitPrice",
+      width: "10%",
     },
     {
       title: "Số lượng",
       dataIndex: "quantity",
-      key: "quantity",
-    },
-    {
-      title: "Giá tiền",
-      dataIndex: "price",
-      key: "price",
+      width: "10%",
     },
     {
       title: "Tổng tiền",
-      dataIndex: "totalMoney",
-      key: "totalMoney",
+      dataIndex: "totalPrice",
+      width: "10%",
     },
   ];
 
-  // Dữ liệu giả
-  const data = [
-    {
-      key: "1", // Unique key cho mỗi dòng
-      buyer: "Nguyễn Văn A",
-      paperType: "A4",
-      buyDate: "20-10-2024",
-      quantity: 10,
-      price: 2000,
-      totalMoney: 20000, // quantity * price
-    },
-    {
-      key: "2",
-      buyer: "Trần Thị B",
-      paperType: "A3",
-      buyDate: "21-10-2024",
-      quantity: 5,
-      price: 3000,
-      totalMoney: 15000,
-    },
-    {
-      key: "3",
-      buyer: "Lê Văn C",
-      paperType: "Giấy ảnh",
-      buyDate: "22-10-2024",
-      quantity: 2,
-      price: 10000,
-      totalMoney: 20000,
-    },
-    {
-      key: "4",
-      buyer: "Hoàng Thị D",
-      paperType: "A4",
-      buyDate: "23-10-2024",
-      quantity: 20,
-      price: 2000,
-      totalMoney: 40000,
-    },
-    {
-      key: "5",
-      buyer: "Phạm Văn E",
-      paperType: "A4",
-      buyDate: "24-10-2024",
-      quantity: 15,
-      price: 2000,
-      totalMoney: 30000,
-    },
-  ];
+  const handlePageChange = (e) => {
+    setPage(e);
+  };
 
   return (
-    <div className="w-full h-full bg-white pt-5 px-5">
-      <h2 className="w-1/2 border-b border-slate-400 mb-5 pb-3 text-2xl font-bold text-darkblue">Lịch sử mua giấy in</h2>
-      <Table columns={columns} dataSource={data} />
+    <div className="w-full h-full bg-white pt-5 px-5 flex flex-col gap-5">
+      <h2 className="w-1/2 border-b border-slate-400 pb-3 text-2xl font-bold text-darkblue">Lịch sử mua giấy in</h2>
+      <Table columns={columns} dataSource={purchaseHistList.paymentLogsResponseList} pagination={false} />
+      <Pagination
+        defaultCurrent={1}
+        total={purchaseHistList?.total || 0}
+        current={page + 1}
+        pageSize={purchaseHistList?.pageSize || 10}
+        onChange={handlePageChange}
+        className="self-end"
+      />
     </div>
   );
 };

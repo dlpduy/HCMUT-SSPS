@@ -60,7 +60,7 @@ public class SpsoController {
             PageRequest pageRequest = PageRequest.of(page, size);
             Page<PrinterResponse> printerResponses = spsoService.getAllPrinters(pageRequest);
             int totalPages = printerResponses.getTotalPages();
-            return ResponseEntity.ok(new PrinterListResponse(printerResponses.getContent(), totalPages));
+            return ResponseEntity.ok(printerResponses);
         } catch (Exception e) {
             return GlobalException.handleException(e);
         }
@@ -107,8 +107,8 @@ public class SpsoController {
         try {
             PageRequest pageRequest = PageRequest.of(page, size);
             Page<PrintingLogResponse> printingLogResponses = spsoService.getAllPrintingLogs(pageRequest);
-            int totalPages = printingLogResponses.getTotalPages();
-            return ResponseEntity.ok(new PrintingLogListResponse(printingLogResponses.getContent(), totalPages));
+            // int totalPages = printingLogResponses.getTotalPages();
+            return ResponseEntity.ok(printingLogResponses);
         } catch (Exception e) {
             return GlobalException.handleException(e);
         }

@@ -1,92 +1,82 @@
-import { useState } from "react";
-import { SearchOutlined } from "@ant-design/icons";
-import { Input, Table } from "antd";
-
-const { Search } = Input;
+import { useState, useEffect } from "react";
+import { Table, Pagination } from "antd";
+import { getAllPrintingHistory } from "../../../../api/spso";
 
 const StudentPrintingHistory = () => {
-  const [setSearchText] = useState("");
+  const [printHistList, setPrintHistList] = useState([]);
+  const [page, setPage] = useState(0);
 
-  const dataSource = [
-    {
-      key: "1",
-      studentName: "Nguyễn Văn A",
-      studentId: "0000001",
-      documentName: "Tài liệu ôn thi cuối kỳ",
-      printerId: "ABCXYZ123",
-      date: "27/10/2024",
-      quantity: 2,
-      cost: "30,000",
-    },
-    {
-      key: "2",
-      studentName: "Nguyễn Văn A",
-      studentId: "0000001",
-      documentName: "Tài liệu ôn thi cuối kỳ",
-      printerId: "ABCXYZ123",
-      date: "27/10/2024",
-      quantity: 2,
-      cost: "30,000",
-    },
-  ];
-
-  const [tableData, setTableData] = useState(dataSource);
+  useEffect(() => {
+    getAllPrintingHistory({ page: page }).then((res) => setPrintHistList(res.data));
+  }, [page]);
 
   const columns = [
     {
-      title: "Tên sinh viên",
-      dataIndex: "studentName",
-      key: "studentName",
-    },
-    {
       title: "Mã số sinh viên",
       dataIndex: "studentId",
-      key: "studentId",
-    },
-    {
-      title: "Tên tài liệu",
-      dataIndex: "documentName",
-      key: "documentName",
+      width: "10%",
     },
     {
       title: "Mã máy in",
       dataIndex: "printerId",
-      key: "printerId",
+      width: "10%",
+    },
+    {
+      title: "Tên tài liệu",
+      dataIndex: null,
+      render: (value) => value.fileName + value.fileType,
+      width: "20%",
+    },
+    {
+      title: "Loại giấy in",
+      dataIndex: "paperType",
+      width: "10%",
     },
     {
       title: "Ngày in",
-      dataIndex: "date",
-      key: "date",
+      dataIndex: "time",
+      render: (value) => {
+        const date = new Date(value);
+        return `${String(date.getHours())}:${String(date.getMinutes())} ${String(date.getDate())} - ${String(date.getMonth() + 1)} - ${date.getFullYear()}`;
+      },
+      width: "15%",
     },
     {
-      title: "Số lượng đã in",
-      dataIndex: "quantity",
-      key: "quantity",
+      title: "Số lượng bản in",
+      dataIndex: "numCopy",
+      width: "10%",
     },
     {
-      title: "Giá tiền",
-      dataIndex: "cost",
-      key: "cost",
+      title: "Số lượng trang tài liệu",
+      dataIndex: "numPages",
+      width: "10%",
+    },
+    {
+      title: "Ngày in",
+      dataIndex: "time",
+      render: (value) => {
+        const date = new Date(value);
+        return `${String(date.getDate())} - ${String(date.getMonth() + 1)} - ${date.getFullYear()}`;
+      },
+      width: "15%",
     },
   ];
 
-  const onSearch = (value) => {
-    const filtered = dataSource.filter((item) => Object.values(item).some((field) => String(field).toLowerCase().includes(value.toLowerCase())));
-    setTableData(filtered);
+  const handlePageChange = (e) => {
+    setPage(e);
   };
-
   return (
-    <div className="w-full h-full bg-white pt-5 px-5">
-      <h2 className="w-1/2 border-b border-slate-400 mb-5 pb-3 text-2xl font-bold text-darkblue">Lịch sử sử dụng dịch vụ</h2>
-      <Search
-        size="large"
-        placeholder="Search..."
-        prefix={<SearchOutlined style={{ color: "#1890ff" }} />}
-        style={{ width: 400, borderRadius: "8px" }}
-        onSearch={onSearch}
-        onChange={(e) => setSearchText(e.target.value)}
+    <div className="w-full h-full bg-white pt-5 px-5 flex flex-col gap-5">
+      <h2 className="w-1/2 border-b border-slate-400 pb-3 text-2xl font-bold text-darkblue">Lịch sử sử dụng dịch vụ</h2>
+      <Table dataSource={printHistList?.content} columns={columns} pagination={false} />
+      <Pagination
+        defaultCurrent={1}
+        total={printHistList?.total || 0}
+        current={page + 1}
+        pageSize={printHistList?.pageSize || 10}
+        onChange={handlePageChange}
+        className="self-end"
       />
-      <Table dataSource={tableData} columns={columns} />
     </div>
   );
 };
