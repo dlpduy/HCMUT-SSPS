@@ -121,9 +121,8 @@ public class PaperService {
             studentPaper.setQuantity(studentPaper.getQuantity() + quantity);
         }
         studentPaperRepository.save(studentPaper);
-        paymentService.markTransactionAsProcessed(request.getParameter("vnp_TxnRef"));
         this.emailService.sendEmail(emailDTO);
-
+        paymentService.markTransactionAsProcessed(request.getParameter("vnp_TxnRef"));
         return new RestResponse<>(HttpServletResponse.SC_OK, null, "Payment Successful", null);
     }
 
