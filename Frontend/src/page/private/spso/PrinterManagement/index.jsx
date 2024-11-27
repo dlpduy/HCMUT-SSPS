@@ -70,7 +70,7 @@ const data = [
 ];
 const PrinterManagement = () => {
   return (
-    <div className="w-full h-full bg-white mt-5" style={{ padding: "20px" }}>
+    <div className="w-full h-full bg-white pt-5 px-5">
       <h2 className="w-1/2 border-b border-slate-400 mb-5 pb-3 text-2xl font-bold text-darkblue">Danh sách máy in</h2>
       <Table columns={columns} dataSource={data} />
     </div>

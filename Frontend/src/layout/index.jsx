@@ -18,8 +18,6 @@ const LayoutPage = () => {
       description: placement,
     });
   };
-
-  console.log(role);
   return (
     <MyContext.Provider value={{ setRole, openNotification }}>
       <Layout className="min-h-screen w-full h-screen">

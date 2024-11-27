@@ -1,9 +1,11 @@
 /* eslint-disable react/prop-types */
+import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Tooltip } from "antd";
 import logo from "../../assets/img/logo.png";
 import Cookies from "js-cookie";
 import { LogoutOutlined } from "@ant-design/icons";
+import { MyContext } from "../../config/context";
 
 const HeaderItems = (role) => {
   if (role?.role == "student")
@@ -18,7 +20,7 @@ const HeaderItems = (role) => {
         <Link className="text-[#0022FF] text-base font-bold" to="/student/purchase-paper">
           Mua giấy in
         </Link>
-        <Link className="text-[#0022FF] text-base font-bold" to="/student/print-history">
+        <Link className="text-[#0022FF] text-base font-bold" to="/student/printing-history">
           Xem lịch sử
         </Link>
       </div>
@@ -60,6 +62,9 @@ const HeaderItems = (role) => {
 
 const HeaderPage = ({ role }) => {
   const navigate = useNavigate();
+
+  const { setRole } = useContext(MyContext);
+
   return (
     <div className="w-full h-full flex flex-row items-center">
       <img className="h-14 cursor-pointer" src={logo} alt="" onClick={() => navigate("/main", { replace: true })} />
@@ -75,6 +80,8 @@ const HeaderPage = ({ role }) => {
                 Cookies.remove("role");
                 Cookies.remove("token");
                 Cookies.remove("name");
+                setRole("");
+                navigate("/main");
               }}
             />
           </Tooltip>
