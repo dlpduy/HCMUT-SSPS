@@ -7,6 +7,7 @@ import com.project.SSPS.util.annotation.ApiMessage;
 import com.project.SSPS.util.errors.GlobalException;
 
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -125,5 +126,15 @@ public class SpsoController {
             } catch (Exception e) {
                 return ResponseEntity.badRequest().body(e.getMessage());
             }
+    }
+
+    @GetMapping("statistic")
+    public ResponseEntity<?> getStastics() {
+        try {
+            StatisticResponse statisticResponse = spsoService.getStatistic();
+            return ResponseEntity.ok(statisticResponse);
+        } catch (Exception e) {
+            return GlobalException.handleException(e);
+        }
     }
 }

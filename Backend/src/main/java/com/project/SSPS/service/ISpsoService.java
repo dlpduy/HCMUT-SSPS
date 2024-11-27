@@ -24,4 +24,6 @@ public interface ISpsoService {
     Page<PrintingLogResponse> getAllPrintingLogs(PageRequest pageRequest);
 
     PaymentLogsListResponse getAllPaymentLogs(PageRequest pageRequest);
+
+    StatisticResponse getStatistic();
 }
