@@ -2,13 +2,11 @@ package com.project.SSPS.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "student_papers")
-public class StudentPaper extends BaseEntity {
+public class StudentPaper {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,6 +16,10 @@ public class StudentPaper extends BaseEntity {
 
     @Column(name = "paper_type")
     private String paperType;
+
+    @ManyToOne
+    @JoinColumn(name = "paper_type", referencedColumnName = "type", insertable = false, updatable = false)
+    private Paper paper;
 
     private Long quantity;
 }

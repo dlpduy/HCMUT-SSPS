@@ -9,6 +9,5 @@ public abstract class PaymentDTO {
     public static class VNPayResponse {
         public String code;
         public String message;
-        public String paymentUrl;
     }
 }

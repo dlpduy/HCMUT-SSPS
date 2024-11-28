@@ -1,6 +1,7 @@
 package com.project.SSPS.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.javafaker.Bool;
 import jakarta.persistence.MappedSuperclass;
 import lombok.*;
 
@@ -17,6 +18,13 @@ public class BaseResponse {
     @JsonProperty("updated_at")
     private LocalDateTime updatedAt;
 
-    public BaseResponse(boolean b, String printJobSubmittedSuccessfully) {
+    private String message;
+    private Boolean success;
+
+    public BaseResponse(boolean success, String message) {
+        this.success = success;
+        this.message = message;
+        this.updatedAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
     }
 }

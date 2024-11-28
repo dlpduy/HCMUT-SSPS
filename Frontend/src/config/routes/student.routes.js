@@ -1,6 +1,6 @@
 import LayoutPage from './../../layout/index';
-import BuyPaper from './../../page/private/student/BuyPaper/index';
-import BuyPaperHistory from './../../page/private/student/BuyPaperHistory/index';
+import PurchasePaper from '../../page/private/student/PurchasePaper/index';
+import PurchasePaperHistory from './../../page/private/student/PurchasePaperHistory/index';
 import Payment from './../../page/private/student/Payment/index';
 import Print from './../../page/private/student/Print/index';
 import PrintingHistory from './../../page/private/student/PrintingHistory/index';
@@ -10,12 +10,12 @@ const studentRouter ={
     element: LayoutPage,
     children: [
       {
-        subPath: "buy-paper",
-        Component: BuyPaper,
+        subPath: "purchase-paper",
+        Component: PurchasePaper,
       },
       {
-        subPath: "buy-paper-history",
-        Component: BuyPaperHistory,
+        subPath: "purchase-paper-history",
+        Component: PurchasePaperHistory,
       },
       {
         subPath: "payment",
@@ -26,12 +26,12 @@ const studentRouter ={
         Component: Print,
       },
       {
-        subPath: "print-history",
+        subPath: "printing-history",
         Component: PrintingHistory,
       },
       {
         subPath: "", 
-        Component: BuyPaper,
+        Component: PurchasePaper,
       },
     ]}
   
