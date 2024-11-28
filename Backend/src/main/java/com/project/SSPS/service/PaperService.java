@@ -238,7 +238,7 @@ public class PaperService {
             throw new RuntimeException("Paper not found");
         }
         paperRepository.deleteById(id);
-        return new RestResponse<>(HttpStatus.OK.value(), null, "Paper " + paper.getType() + "is deleted successfully",
+        return new RestResponse<>(HttpStatus.OK.value(), null, "Paper " + paper.getType() + " is deleted successfully",
                 null);
     }
 

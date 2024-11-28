@@ -68,7 +68,7 @@ public class PaperController {
         }
     }
 
-    @DeleteMapping("spso/paper/{id}")
+    @DeleteMapping("/spso/paper/{id}")
     @ApiMessage("Delete paper by id")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         try {
