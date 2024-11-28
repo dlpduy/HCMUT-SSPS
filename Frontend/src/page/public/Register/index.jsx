@@ -69,26 +69,26 @@ const Register = () => {
               required: true,
               message: "Please input your Password!",
             },
-            // {
-            //   validator: (_, value) => {
-            //     if (value != undefined && value != null) {
-            //       if (!/^.{8,16}$/.test(value)) {
-            //         return Promise.reject("Password must have 8-16 symbols!");
-            //       } else if (!/(?=.*[A-Z])/.test(value)) {
-            //         return Promise.reject("Password must have uppercase letter!");
-            //       } else if (!/(?=.*[a-z])/.test(value)) {
-            //         return Promise.reject("Password must have lowercase letter!");
-            //       } else if (!/(?=.*\d)/.test(value)) {
-            //         return Promise.reject("Password must have number!");
-            //       } else if (!/(?=.*[!@#$%^&*])/.test(value)) {
-            //         return Promise.reject("Password must have special symbol!");
-            //       }
-            //       return Promise.resolve();
-            //     } else {
-            //       return Promise.reject();
-            //     }
-            //   },
-            // },
+            {
+              validator: (_, value) => {
+                if (value != undefined && value != null) {
+                  if (!/^.{8,16}$/.test(value)) {
+                    return Promise.reject("Password must have 8-16 symbols!");
+                  } else if (!/(?=.*[A-Z])/.test(value)) {
+                    return Promise.reject("Password must have uppercase letter!");
+                  } else if (!/(?=.*[a-z])/.test(value)) {
+                    return Promise.reject("Password must have lowercase letter!");
+                  } else if (!/(?=.*\d)/.test(value)) {
+                    return Promise.reject("Password must have number!");
+                  } else if (!/(?=.*[!@#$%^&*])/.test(value)) {
+                    return Promise.reject("Password must have special symbol!");
+                  }
+                  return Promise.resolve();
+                } else {
+                  return Promise.reject();
+                }
+              },
+            },
           ]}
         >
           <Input.Password prefix={<LockOutlined />} type="password" placeholder="Password" className="h-10" />

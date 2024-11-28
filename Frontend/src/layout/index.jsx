@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { Outlet } from "react-router-dom";
 import { Layout, notification } from "antd";
 import Cookies from "js-cookie";
 import HeaderPage from "./Header";
+import ContentPage from "./Content";
 import { MyContext } from "../config/context";
 
 const { Header, Content } = Layout;
@@ -25,7 +25,7 @@ const LayoutPage = () => {
           <HeaderPage role={role} />
         </Header>
         <Content className="h-full w-full">
-          <Outlet />
+          <ContentPage role={role} />
         </Content>
       </Layout>
       {contextHolder}
