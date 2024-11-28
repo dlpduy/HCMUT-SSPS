@@ -13,6 +13,6 @@ import java.util.List;
 @Repository
 public interface PrinterRepository extends JpaRepository<Printer, Long> {
     Page<Printer> findAll(Pageable pageable);
-
     Printer save(Printer printer);
+
 }

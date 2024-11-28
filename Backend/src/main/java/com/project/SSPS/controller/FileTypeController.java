@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-@RequestMapping("api/v1/spso")
+@RequestMapping("api/v1")
 public class FileTypeController {
     private final FileTypeService fileTypeService;
 
@@ -28,7 +28,7 @@ public class FileTypeController {
         this.fileTypeService = fileTypeService;
     }
 
-    @PostMapping("/filetype")
+    @PostMapping("/spso/filetype")
     @ApiMessage("Create file successfully")
     public ResponseEntity<?> create(@Valid @RequestBody FileTypeDTO fileTypeDTO, HttpServletRequest request) {
         try {
@@ -58,7 +58,7 @@ public class FileTypeController {
         }
     }
 
-    @PutMapping("/filetype/{id}")
+    @PutMapping("/spso/filetype/{id}")
     @ApiMessage("Update file type successfully")
     public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody FileTypeDTO fileTypeDTO) {
         try {
@@ -68,7 +68,7 @@ public class FileTypeController {
         }
     }
 
-    @DeleteMapping("/filetype/{id}")
+    @DeleteMapping("spso/filetype/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         try {
             return ResponseEntity.ok().body(fileTypeService.delete(id));
