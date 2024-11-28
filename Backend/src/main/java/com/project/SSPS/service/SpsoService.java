@@ -8,6 +8,8 @@ import com.project.SSPS.repository.OrderPaperRepository;
 import com.project.SSPS.repository.PrinterRepository;
 import com.project.SSPS.repository.PrintingLogRepository;
 import com.project.SSPS.response.*;
+
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
@@ -24,6 +26,7 @@ public class SpsoService implements ISpsoService {
     private final PrinterRepository printerRepository;
     private final PrintingLogRepository printingLogRepository;
     private final OrderPaperRepository orderPaperRepository;
+
     @Override
     public SpsoResponse findSpsoInfo(Long id) {
         return null;
@@ -76,18 +79,19 @@ public class SpsoService implements ISpsoService {
     }
 
     @Override
-    public Void deletePrinter(Long id) throws Exception {
+    public RestResponse<Object> deletePrinter(Long id) throws Exception {
         Printer printer = printerRepository.findById(id).orElse(null);
         if (printer == null) {
             throw new Exception("Printer not found");
         }
         printerRepository.delete(printer);
-        return null;
+        return new RestResponse<>(HttpServletResponse.SC_OK, null, "Delete printer have id " + id + " successfully!",
+                null);
     }
 
     @Override
     public Page<PrintingLogResponse> getAllPrintingLogs(PageRequest pageRequest) {
-        Page<PrintingLog>  printingLogs = printingLogRepository.findAll(pageRequest);
+        Page<PrintingLog> printingLogs = printingLogRepository.findAll(pageRequest);
         return printingLogs.map(PrintingLogResponse::fromPrintingLog);
     }
 
@@ -102,8 +106,8 @@ public class SpsoService implements ISpsoService {
 
     @Override
     public StatisticResponse getStatistic() {
-//        long totalPrintingLogs = printingLogRepository.countPrintingLogs();
-        //nOrderPaper = nPaymentLogs
+        // long totalPrintingLogs = printingLogRepository.countPrintingLogs();
+        // nOrderPaper = nPaymentLogs
         Long totalPurchasing = orderPaperRepository.countOrderPapers();
         Long totalPrinting = printingLogRepository.countPrintingLog();
         return new StatisticResponse(totalPrinting, totalPurchasing);

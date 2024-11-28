@@ -3,20 +3,21 @@ package com.project.SSPS.service;
 import com.project.SSPS.dto.*;
 import com.project.SSPS.model.*;
 import com.project.SSPS.repository.*;
-import com.project.SSPS.response.BuyPageResponse;
-import com.project.SSPS.response.CreatePaymentBuyResponse;
-import com.project.SSPS.response.OrderHistoryResponse;
-import com.project.SSPS.response.PageResponse;
+import com.project.SSPS.response.*;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.project.SSPS.response.PaperResponse;
 import com.project.SSPS.response.ResponseObject;
 import com.project.SSPS.response.RestResponse;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -31,15 +32,24 @@ public class PaperService {
     private final StudentPaperRepository studentPaperRepository;
     private final PaymentService paymentService;
     private final EmailService emailService;
+    private final PrintingLogRepository printingLogRepository;
+    private final PrinterRepository printerRepository;
+    private final FileRepository fileRepository;
+    private final FileTypeRepository fileTypeRepository;
 
-    public PaperService(UserService userService,
+    public PaperService(
+            UserService userService,
             JwtService jwtService,
             PaperRepository paperRepository,
             OrderRepository orderRepository,
             OrderPaperRepository orderPaperRepository,
             HttpServletRequest httpServletRequest,
             StudentPaperRepository studentPaperRepository, PaymentService paymentService,
-            EmailService emailService) {
+            EmailService emailService,
+            PrinterRepository printerRepository,
+            PrintingLogRepository printingLogRepository,
+            FileRepository fileRepository,
+            FileTypeRepository fileTypeRepository) {
         this.userService = userService;
         this.jwtService = jwtService;
         this.paperRepository = paperRepository;
@@ -48,6 +58,10 @@ public class PaperService {
         this.studentPaperRepository = studentPaperRepository;
         this.paymentService = paymentService;
         this.emailService = emailService;
+        this.printerRepository = printerRepository;
+        this.printingLogRepository = printingLogRepository;
+        this.fileRepository = fileRepository;
+        this.fileTypeRepository = fileTypeRepository;
     }
 
     public CreatePaymentBuyResponse createPayment(BuyPageDTO buyPageDTO, HttpServletRequest request) {
@@ -147,6 +161,9 @@ public class PaperService {
         if (paper == null) {
             throw new RuntimeException("Paper not found");
         }
+        if (paperRepository.existsByType(paperDTO.getType()) && !paper.getType().equals(paperDTO.getType())) {
+            throw new RuntimeException("Paper type already exists, you can't update this paper type");
+        }
 
         paper.setType(paperDTO.getType());
         paper.setWidth(paperDTO.getWidth());
@@ -156,7 +173,10 @@ public class PaperService {
         return PaperResponse.fromPaper(paper);
     }
 
-    public List<PageResponse> getPagesLeft(Long studentId) {
+    public List<PageResponse> getPagesLeft(HttpServletRequest httpRequest) {
+        String token = httpRequest.getHeader("Authorization").replace("Bearer ", "");
+        Long studentId = jwtService.extractUserId(token);
+
         List<StudentPaper> studentPapers = studentPaperRepository.findByStudentId(studentId);
         List<PageResponse> responses = new ArrayList<>();
 
@@ -178,7 +198,10 @@ public class PaperService {
         return PaperResponse.fromPaper(paper);
     }
 
-    public List<OrderHistoryResponse> getPageBuyingHistory(Long studentId) {
+    public List<OrderHistoryResponse> getPageBuyingHistory(HttpServletRequest httpRequest) {
+        String token = httpRequest.getHeader("Authorization").replace("Bearer ", "");
+        Long studentId = jwtService.extractUserId(token);
+
         List<Order> orders = orderRepository.findByStudentIdOrderByCreatedAtDesc(studentId);
         List<OrderHistoryResponse> responses = new ArrayList<>();
 
@@ -186,6 +209,7 @@ public class PaperService {
             OrderHistoryResponse response = new OrderHistoryResponse();
             response.setOrderId(order.getId());
             response.setTotalPrice(order.getTotalPrice());
+            response.setTime(order.getCreatedAt());
 
             List<OrderPaper> orderPapers = orderPaperRepository.findByOrderId(order.getId());
             List<OrderHistoryResponse.OrderPaperDetail> paperDetails = new ArrayList<>();
@@ -208,12 +232,134 @@ public class PaperService {
         return paperRepository.findAll().stream().map(PaperResponse::fromPaper).toList();
     }
 
-    public String delete(Long id) {
+    public RestResponse<Object> delete(Long id) {
         Paper paper = paperRepository.findById(id).orElse(null);
         if (paper == null) {
             throw new RuntimeException("Paper not found");
         }
         paperRepository.deleteById(id);
-        return "Paper deleted successfully";
+        return new RestResponse<>(HttpStatus.OK.value(), null, "Paper " + paper.getType() + "is deleted successfully",
+                null);
+    }
+
+    public PrintingLogResponse printDocument(PrintRequestDTO request, HttpServletRequest httpRequest) {
+        // Get user id from token
+        String token = httpRequest.getHeader("Authorization").replace("Bearer ", "");
+        Long studentId = jwtService.extractUserId(token);
+
+        Printer printer = printerRepository.findById(request.getPrinterId())
+                .orElseThrow(() -> new RuntimeException("Printer not found"));
+
+        Paper paper = paperRepository.findByType(request.getPaperType());
+
+        File file = fileRepository.findById(request.getFileId())
+                .orElseThrow(() -> new RuntimeException("File not found"));
+
+        if (!file.getStudent().getId().equals(studentId)) {
+            throw new RuntimeException("File does not belong to the student");
+        }
+
+        StudentPaper studentPaper = studentPaperRepository
+                .findByStudentIdAndPaperType(studentId, request.getPaperType());
+
+        if (studentPaper == null || studentPaper.getQuantity() < request.getNumPages() * request.getNumCopy()) {
+            throw new RuntimeException("Insufficient pages available");
+        }
+
+        if (request.getPrintingPages().isEmpty() || request.getPrintingPages().length() > 100) {
+            throw new RuntimeException("Invalid printing pages format");
+        }
+
+        PrintingLog printingLog = new PrintingLog();
+        printingLog.setPrinter(printer);
+        printingLog.setPaper(paper);
+        printingLog.setFile(file);
+        printingLog.setNumCopy(request.getNumCopy());
+        printingLog.setSided(request.getSided());
+        printingLog.setPrintingPages(request.getPrintingPages());
+        printingLog.setNumPages(request.getNumPages());
+        printingLog.setTime(LocalDateTime.now());
+
+        printingLog = printingLogRepository.save(printingLog);
+
+        studentPaper.setQuantity(studentPaper.getQuantity() - request.getNumPages() * request.getNumCopy());
+        studentPaperRepository.save(studentPaper);
+
+        return PrintingLogResponse.fromPrintingLog(printingLog);
+    }
+
+    public FileResponse createFile(FileDTO fileDTO, HttpServletRequest request) {
+        String token = request.getHeader("Authorization").replace("Bearer ", "");
+        Long userId = jwtService.extractUserId(token);
+
+        User student = userService.findById(userId);
+
+        if (!fileTypeRepository.existsByType(fileDTO.getFileType())) {
+            throw new RuntimeException("Invalid file type");
+        }
+
+        File file = new File();
+        file.setFileName(fileDTO.getFileName());
+        file.setFileType(fileDTO.getFileType());
+        file.setStudent(student);
+
+        file = fileRepository.save(file);
+
+        FileResponse response = new FileResponse();
+        response.setFileId(file.getId());
+        response.setFileName(file.getFileName());
+        response.setFileType(file.getFileType());
+        return response;
+    }
+
+    public List<PrintingLogResponse> getStudentPrintingLogs(HttpServletRequest httpRequest) {
+        // Get user id from token
+        String token = httpRequest.getHeader("Authorization").replace("Bearer ", "");
+        Long studentId = jwtService.extractUserId(token);
+
+        // Get student
+        User student = userService.findById(studentId);
+
+        // Get all printing logs for files owned by the student
+        List<PrintingLog> printingLogs = printingLogRepository.findByFileStudentOrderByTimeDesc(student);
+
+        return printingLogs.stream()
+                .map(PrintingLogResponse::fromPrintingLog)
+                .collect(Collectors.toList());
+    }
+
+    public List<PrintingLogResponse> getPrinterLogs(Long printerId, HttpServletRequest httpRequest) {
+        // Get user id from token
+        String token = httpRequest.getHeader("Authorization").replace("Bearer ", "");
+        Long studentId = jwtService.extractUserId(token);
+        // Verify printer exists
+        if (!printerRepository.existsById(printerId)) {
+            throw new RuntimeException("Printer not found");
+        }
+
+        // Get all printing logs for files owned by the student
+        List<PrintingLog> printingLogs = printingLogRepository.findByStudentIdAndPrinterId(studentId, printerId);
+
+        // List<PrintingLog> printingLogs =
+        // printingLogRepository.findByPrinterIdOrderByTimeDesc(printerId);
+
+        return printingLogs.stream()
+                .map(PrintingLogResponse::fromPrintingLog)
+                .collect(Collectors.toList());
+    }
+
+    public List<FileResponse> getStudentFiles(HttpServletRequest httpRequest) {
+        // Get user id from token
+        String token = httpRequest.getHeader("Authorization").replace("Bearer ", "");
+        Long studentId = jwtService.extractUserId(token);
+
+        // Get student
+        User student = userService.findById(studentId);
+
+        List<File> files = fileRepository.findByStudentOrderByIdDesc(student);
+
+        return files.stream()
+                .map(FileResponse::fromFile)
+                .collect(Collectors.toList());
     }
 }

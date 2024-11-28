@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-@RequestMapping("api/v1/spso")
+@RequestMapping("api/v1")
 public class FileTypeController {
     private final FileTypeService fileTypeService;
 
@@ -28,7 +28,7 @@ public class FileTypeController {
         this.fileTypeService = fileTypeService;
     }
 
-    @PostMapping("/filetype")
+    @PostMapping("/spso/filetype")
     @ApiMessage("Create file successfully")
     public ResponseEntity<?> create(@Valid @RequestBody FileTypeDTO fileTypeDTO, HttpServletRequest request) {
         try {
@@ -49,7 +49,7 @@ public class FileTypeController {
     }
 
     @GetMapping("/filetype/{id}")
-    @ApiMessage("Get file type by id")
+    @ApiMessage("Get file type by id successfully")
     public ResponseEntity<?> getById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok().body(fileTypeService.getById(id));
@@ -58,8 +58,8 @@ public class FileTypeController {
         }
     }
 
-    @PutMapping("/filetype/{id}")
-    @ApiMessage("Update file type by id")
+    @PutMapping("/spso/filetype/{id}")
+    @ApiMessage("Update file type successfully")
     public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody FileTypeDTO fileTypeDTO) {
         try {
             return ResponseEntity.ok().body(fileTypeService.update(id, fileTypeDTO));
@@ -68,12 +68,10 @@ public class FileTypeController {
         }
     }
 
-    @DeleteMapping("/filetype/{id}")
-    @ApiMessage("Delete file type by id")
+    @DeleteMapping("spso/filetype/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         try {
-            fileTypeService.delete(id);
-            return ResponseEntity.ok().body("File type deleted successfully");
+            return ResponseEntity.ok().body(fileTypeService.delete(id));
         } catch (Exception e) {
             return GlobalException.handleException(e);
         }

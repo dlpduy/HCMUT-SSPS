@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-@RequestMapping("api/v1/spso")
+@RequestMapping("api/v1")
 public class PaperController {
     private final PaperService paperService;
 
@@ -28,7 +28,7 @@ public class PaperController {
         this.paperService = paperService;
     }
 
-    @PostMapping("/paper")
+    @PostMapping("/spso/paper")
     @ApiMessage("Create paper successfully")
     public ResponseEntity<?> create(@Valid @RequestBody PaperDTO paperDTO, HttpServletRequest request) {
         try {
@@ -38,7 +38,7 @@ public class PaperController {
         }
     }
 
-    @PutMapping("/paper/{id}")
+    @PutMapping("/spso/paper/{id}")
     @ApiMessage("Update paper successfully")
     public ResponseEntity<?> update(@Valid @RequestBody PaperDTO paperDTO, @PathVariable Long id) {
         try {
@@ -68,7 +68,7 @@ public class PaperController {
         }
     }
 
-    @DeleteMapping("/paper/{id}")
+    @DeleteMapping("spso/paper/{id}")
     @ApiMessage("Delete paper by id")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         try {
