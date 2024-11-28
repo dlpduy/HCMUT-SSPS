@@ -56,15 +56,15 @@ public class StudentController {
     // }
 
     // Get page left
-    @GetMapping("/page/{id}")
-    public ResponseEntity<?> getPagesLeft(@PathVariable("id") Long studentId) {
-        return ResponseEntity.ok(paperService.getPagesLeft(studentId));
+    @GetMapping("/page")
+    public ResponseEntity<?> getPagesLeft(HttpServletRequest request) {
+        return ResponseEntity.ok(paperService.getPagesLeft(request));
     }
 
     // Get page-buying history
-    @GetMapping("/pages/{id}")
-    public ResponseEntity<?> getPageBuyingHistory(@PathVariable("id") Long studentId) {
-        return ResponseEntity.ok(paperService.getPageBuyingHistory(studentId));
+    @GetMapping("/pages")
+    public ResponseEntity<?> getPageBuyingHistory(HttpServletRequest request) {
+        return ResponseEntity.ok(paperService.getPageBuyingHistory(request));
     }
 
     // Create print setting
@@ -74,8 +74,7 @@ public class StudentController {
             PrintingLogResponse printingLogResponse = paperService.printDocument(printRequest, request);
             return ResponseEntity.ok(printingLogResponse);
         } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                    .body(new BaseResponse(false, e.getMessage()));
+            return GlobalException.handleException(e);
         }
     }
 
@@ -85,8 +84,7 @@ public class StudentController {
         try {
             return ResponseEntity.ok(paperService.createFile(fileDTO, request));
         } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                    .body(new BaseResponse(false, e.getMessage()));
+            return GlobalException.handleException(e);
         }
     }
 
@@ -97,8 +95,7 @@ public class StudentController {
             List<PrintingLogResponse> printingLogs = paperService.getStudentPrintingLogs(request);
             return ResponseEntity.ok(printingLogs);
         } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                    .body(new BaseResponse(false, e.getMessage()));
+            return GlobalException.handleException(e);
         }
     }
 
@@ -109,8 +106,7 @@ public class StudentController {
             List<PrintingLogResponse> printingLogs = paperService.getPrinterLogs(printerId, request);
             return ResponseEntity.ok(printingLogs);
         } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                    .body(new BaseResponse(false, e.getMessage()));
+            return GlobalException.handleException(e);
         }
     }
 
@@ -121,8 +117,7 @@ public class StudentController {
             List<FileResponse> files = paperService.getStudentFiles(request);
             return ResponseEntity.ok(files);
         } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                    .body(new BaseResponse(false, e.getMessage()));
+            return GlobalException.handleException(e);
         }
     }
 }

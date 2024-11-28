@@ -46,7 +46,6 @@ public class PaperService {
             FileTypeRepository fileTypeRepository
     )
 
-
      {
         this.userService = userService;
         this.jwtService = jwtService;
@@ -60,7 +59,7 @@ public class PaperService {
         this.printingLogRepository = printingLogRepository;
         this.fileRepository = fileRepository;
         this.fileTypeRepository = fileTypeRepository;
-    }
+     }
 
     public CreatePaymentBuyResponse createPayment(BuyPageDTO buyPageDTO, HttpServletRequest request) {
         if (!paperRepository.existsByType(buyPageDTO.getPaperType())) {
@@ -145,7 +144,10 @@ public class PaperService {
         return PaperResponse.fromPaper(paper);
     }
 
-    public List<PageResponse> getPagesLeft(Long studentId) {
+    public List<PageResponse> getPagesLeft(HttpServletRequest httpRequest) {
+        String token = httpRequest.getHeader("Authorization").replace("Bearer ", "");
+        Long studentId = jwtService.extractUserId(token);
+
         List<StudentPaper> studentPapers = studentPaperRepository.findByStudentId(studentId);
         List<PageResponse> responses = new ArrayList<>();
 
@@ -167,7 +169,10 @@ public class PaperService {
         return PaperResponse.fromPaper(paper);
     }
 
-    public List<OrderHistoryResponse> getPageBuyingHistory(Long studentId) {
+    public List<OrderHistoryResponse> getPageBuyingHistory(HttpServletRequest httpRequest) {
+        String token = httpRequest.getHeader("Authorization").replace("Bearer ", "");
+        Long studentId = jwtService.extractUserId(token);
+
         List<Order> orders = orderRepository.findByStudentIdOrderByCreatedAtDesc(studentId);
         List<OrderHistoryResponse> responses = new ArrayList<>();
 
