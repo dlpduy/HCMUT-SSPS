@@ -82,7 +82,7 @@ public class FileTypeService {
             throw new RuntimeException("File type not found");
         }
         fileTypeRepository.delete(fileType);
-        return new RestResponse<>(200, null, "File type " + fileType.getType() + "is deleted successfully", null);
+        return new RestResponse<>(200, null, "File type " + fileType.getType() + " is deleted successfully", null);
     }
 
 }
