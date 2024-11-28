@@ -20,11 +20,4 @@ public class BaseResponse {
 
     private String message;
     private Boolean success;
-
-    public BaseResponse(boolean success, String message) {
-        this.success = success;
-        this.message = message;
-        this.updatedAt = LocalDateTime.now();
-        this.createdAt = LocalDateTime.now();
-    }
 }
