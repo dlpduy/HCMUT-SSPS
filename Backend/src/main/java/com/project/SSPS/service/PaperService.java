@@ -332,13 +332,16 @@ public class PaperService {
         // Get user id from token
         String token = httpRequest.getHeader("Authorization").replace("Bearer ", "");
         Long studentId = jwtService.extractUserId(token);
-
         // Verify printer exists
         if (!printerRepository.existsById(printerId)) {
             throw new RuntimeException("Printer not found");
         }
 
-        List<PrintingLog> printingLogs = printingLogRepository.findByPrinterIdOrderByTimeDesc(printerId);
+        // Get all printing logs for files owned by the student
+        List<PrintingLog> printingLogs = printingLogRepository.findByStudentIdAndPrinterId(studentId, printerId);
+
+        // List<PrintingLog> printingLogs =
+        // printingLogRepository.findByPrinterIdOrderByTimeDesc(printerId);
 
         return printingLogs.stream()
                 .map(PrintingLogResponse::fromPrintingLog)

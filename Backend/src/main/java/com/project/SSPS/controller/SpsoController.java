@@ -23,12 +23,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/spso/")
+@RequestMapping("api/v1/")
 @RequiredArgsConstructor
 public class SpsoController {
     private final ISpsoService spsoService;
 
-    @PostMapping("printer")
+    @PostMapping("spso/printer")
     @ApiMessage("Create printer successfully")
     public ResponseEntity<?> createPrinter(@Valid @RequestBody PrinterDTO printerDTO, BindingResult bindingResult) {
         try {
@@ -73,7 +73,7 @@ public class SpsoController {
         }
     }
 
-    @PutMapping("printer/{id}")
+    @PutMapping("spso/printer/{id}")
     @ApiMessage("Update printer successfully")
     public ResponseEntity<?> updatePrinter(@PathVariable Long id, @Valid @RequestBody PrinterDTO entity) {
         try {
@@ -83,7 +83,7 @@ public class SpsoController {
         }
     }
 
-    @DeleteMapping("printer/{id}")
+    @DeleteMapping("spso/printer/{id}")
     public ResponseEntity<?> deletePrinter(@PathVariable Long id) {
         try {
 
@@ -95,7 +95,7 @@ public class SpsoController {
 
     // get all printing history
     // http://localhost:8386/api/v1/spso/print?page=0&size=10
-    @GetMapping("print")
+    @GetMapping("spso/print")
     public ResponseEntity<?> getAllPrintRequests(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
@@ -109,7 +109,7 @@ public class SpsoController {
         }
     }
 
-    @GetMapping("page")
+    @GetMapping("spso/page")
     public ResponseEntity<?> getAllPurchasedPages(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
@@ -122,7 +122,7 @@ public class SpsoController {
         }
     }
 
-    @GetMapping("statistic")
+    @GetMapping("spso/statistic")
     public ResponseEntity<?> getStastics() {
         try {
             StatisticResponse statisticResponse = spsoService.getStatistic();

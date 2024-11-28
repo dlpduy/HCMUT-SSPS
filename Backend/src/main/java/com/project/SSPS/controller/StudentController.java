@@ -62,7 +62,7 @@ public class StudentController {
     }
 
     // Get page-buying history
-    @GetMapping("/pages")
+    @GetMapping("/pages-history")
     public ResponseEntity<?> getPageBuyingHistory(HttpServletRequest request) {
         return ResponseEntity.ok(paperService.getPageBuyingHistory(request));
     }
