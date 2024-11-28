@@ -68,7 +68,7 @@ public class FileTypeController {
         }
     }
 
-    @DeleteMapping("spso/filetype/{id}")
+    @DeleteMapping("/spso/filetype/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         try {
             return ResponseEntity.ok().body(fileTypeService.delete(id));
