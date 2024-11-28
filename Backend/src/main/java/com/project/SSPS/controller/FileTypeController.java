@@ -49,7 +49,7 @@ public class FileTypeController {
     }
 
     @GetMapping("/filetype/{id}")
-    @ApiMessage("Get file type by id")
+    @ApiMessage("Get file type by id successfully")
     public ResponseEntity<?> getById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok().body(fileTypeService.getById(id));
@@ -59,7 +59,7 @@ public class FileTypeController {
     }
 
     @PutMapping("/filetype/{id}")
-    @ApiMessage("Update file type by id")
+    @ApiMessage("Update file type successfully")
     public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody FileTypeDTO fileTypeDTO) {
         try {
             return ResponseEntity.ok().body(fileTypeService.update(id, fileTypeDTO));
@@ -69,11 +69,9 @@ public class FileTypeController {
     }
 
     @DeleteMapping("/filetype/{id}")
-    @ApiMessage("Delete file type by id")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         try {
-            fileTypeService.delete(id);
-            return ResponseEntity.ok().body("File type deleted successfully");
+            return ResponseEntity.ok().body(fileTypeService.delete(id));
         } catch (Exception e) {
             return GlobalException.handleException(e);
         }

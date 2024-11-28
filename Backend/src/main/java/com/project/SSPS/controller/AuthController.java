@@ -1,27 +1,20 @@
 package com.project.SSPS.controller;
 
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.mysql.cj.x.protobuf.MysqlxCrud.Update;
 import com.project.SSPS.dto.ForgotPasswordDTO;
 import com.project.SSPS.dto.LoginDTO;
 import com.project.SSPS.dto.RegisterDTO;
 import com.project.SSPS.dto.UpdatePasswordDTO;
-import com.project.SSPS.response.DeleteResponse;
 import com.project.SSPS.response.LoginResponse;
-import com.project.SSPS.response.RestResponse;
 import com.project.SSPS.response.UserResponse;
 import com.project.SSPS.service.AuthService;
 import com.project.SSPS.util.annotation.ApiMessage;
 import com.project.SSPS.util.errors.GlobalException;
-
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 @RestController
@@ -60,7 +53,7 @@ public class AuthController {
     }
 
     @PostMapping("/forgot-password")
-    public ResponseEntity<?> forgotPassword(@RequestBody ForgotPasswordDTO forgotPasswordDTO) {
+    public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordDTO forgotPasswordDTO) {
         try {
             return ResponseEntity.ok(this.authService.forgotPassword(forgotPasswordDTO));
         } catch (Exception e) {

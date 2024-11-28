@@ -19,7 +19,7 @@ public interface ISpsoService {
 
     PrinterResponse updatePrinter(Long id, PrinterDTO entity) throws Exception;
 
-    Void deletePrinter(Long id) throws Exception;
+    RestResponse<Object> deletePrinter(Long id) throws Exception;
 
     Page<PrintingLogResponse> getAllPrintingLogs(PageRequest pageRequest);
 

@@ -3,7 +3,6 @@ package com.project.SSPS.dto;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
-
 @Getter
 @Setter
 @Data
@@ -36,6 +35,6 @@ public class PrinterDTO {
     @Size(max = 10)
     private String buildingName;
 
-    @NotNull
+    @NotNull(message = "Room Num is mandatory")
     private Long roomNum;
 }

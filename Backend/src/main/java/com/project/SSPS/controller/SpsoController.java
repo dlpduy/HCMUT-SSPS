@@ -28,14 +28,12 @@ import java.util.List;
 public class SpsoController {
     private final ISpsoService spsoService;
 
-
     @PostMapping("printer")
     @ApiMessage("Create printer successfully")
-    public ResponseEntity<?> createPrinter(@Valid @RequestBody PrinterDTO printerDTO
-            , BindingResult bindingResult) {
+    public ResponseEntity<?> createPrinter(@Valid @RequestBody PrinterDTO printerDTO, BindingResult bindingResult) {
         try {
             if (bindingResult.hasErrors()) {
-                //return list default message
+                // return list default message
                 List<String> errorMessages = bindingResult.getFieldErrors()
                         .stream()
                         .map(FieldError::getDefaultMessage)
@@ -49,13 +47,12 @@ public class SpsoController {
     }
 
     // get all printer info
-    //localhost:8080/api/v1/spso/printer?page=0&size=10
+    // localhost:8080/api/v1/spso/printer?page=0&size=10
     @GetMapping("printer")
     @ApiMessage("Get all printers successfully")
     public ResponseEntity<?> getAllprinters(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
-    ) {
+            @RequestParam(defaultValue = "10") int size) {
         try {
             PageRequest pageRequest = PageRequest.of(page, size);
             Page<PrinterResponse> printerResponses = spsoService.getAllPrinters(pageRequest);
@@ -87,23 +84,21 @@ public class SpsoController {
     }
 
     @DeleteMapping("printer/{id}")
-    @ApiMessage("Delete printer successfully")
     public ResponseEntity<?> deletePrinter(@PathVariable Long id) {
         try {
-            spsoService.deletePrinter(id);
-            return ResponseEntity.ok().body("Delete printer successfully");
+
+            return ResponseEntity.ok().body(spsoService.deletePrinter(id));
         } catch (Exception e) {
             return GlobalException.handleException(e);
         }
     }
 
     // get all printing history
-    //http://localhost:8386/api/v1/spso/print?page=0&size=10
+    // http://localhost:8386/api/v1/spso/print?page=0&size=10
     @GetMapping("print")
     public ResponseEntity<?> getAllPrintRequests(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
-    ) {
+            @RequestParam(defaultValue = "10") int size) {
         try {
             PageRequest pageRequest = PageRequest.of(page, size);
             Page<PrintingLogResponse> printingLogResponses = spsoService.getAllPrintingLogs(pageRequest);
@@ -116,16 +111,15 @@ public class SpsoController {
 
     @GetMapping("page")
     public ResponseEntity<?> getAllPurchasedPages(
-        @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "10") int size
-    ) {
-            try {
-                PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
-                PaymentLogsListResponse paymentLogsListResponses = spsoService.getAllPaymentLogs(pageRequest);
-                return ResponseEntity.ok(paymentLogsListResponses);
-            } catch (Exception e) {
-                return ResponseEntity.badRequest().body(e.getMessage());
-            }
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        try {
+            PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
+            PaymentLogsListResponse paymentLogsListResponses = spsoService.getAllPaymentLogs(pageRequest);
+            return ResponseEntity.ok(paymentLogsListResponses);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("statistic")

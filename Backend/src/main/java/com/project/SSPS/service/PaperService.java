@@ -147,6 +147,9 @@ public class PaperService {
         if (paper == null) {
             throw new RuntimeException("Paper not found");
         }
+        if (paperRepository.existsByType(paperDTO.getType()) && !paper.getType().equals(paperDTO.getType())) {
+            throw new RuntimeException("Paper type already exists, you can't update this paper type");
+        }
 
         paper.setType(paperDTO.getType());
         paper.setWidth(paperDTO.getWidth());
@@ -208,12 +211,13 @@ public class PaperService {
         return paperRepository.findAll().stream().map(PaperResponse::fromPaper).toList();
     }
 
-    public String delete(Long id) {
+    public RestResponse<Object> delete(Long id) {
         Paper paper = paperRepository.findById(id).orElse(null);
         if (paper == null) {
             throw new RuntimeException("Paper not found");
         }
         paperRepository.deleteById(id);
-        return "Paper deleted successfully";
+        return new RestResponse<>(HttpStatus.OK.value(), null, "Paper " + paper.getType() + "is deleted successfully",
+                null);
     }
 }

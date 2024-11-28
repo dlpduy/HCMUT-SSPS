@@ -7,12 +7,11 @@ import org.springframework.stereotype.Service;
 
 import com.project.SSPS.dto.FileTypeDTO;
 import com.project.SSPS.model.FileType;
-import com.project.SSPS.model.Printer;
 import com.project.SSPS.model.User;
 import com.project.SSPS.repository.FileTypeRepository;
 import com.project.SSPS.repository.UserRepository;
 import com.project.SSPS.response.FileTypeResponse;
-import com.project.SSPS.response.PrinterResponse;
+import com.project.SSPS.response.RestResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -62,10 +61,14 @@ public class FileTypeService {
                 .collect(Collectors.toList());
     }
 
-    public FileTypeResponse update(Long id, FileTypeDTO fileTypeDTO) throws Exception {
+    public FileTypeResponse update(Long id, FileTypeDTO fileTypeDTO) {
         FileType fileType = fileTypeRepository.findById(id).orElse(null);
         if (fileType == null) {
-            throw new Exception("File type not found");
+            throw new RuntimeException("File type not found");
+        }
+        if (fileTypeRepository.existsByType(fileTypeDTO.getType())
+                && !fileType.getType().equals(fileTypeDTO.getType())) {
+            throw new RuntimeException("File type already exists, you can't update");
         }
         fileType.setType(fileTypeDTO.getType());
         fileType.setDescription(fileTypeDTO.getDescription());
@@ -73,12 +76,13 @@ public class FileTypeService {
         return FileTypeResponse.fromFileType(fileType);
     }
 
-    public void delete(Long id) throws Exception {
+    public RestResponse<Object> delete(Long id) {
         FileType fileType = fileTypeRepository.findById(id).orElse(null);
         if (fileType == null) {
-            throw new Exception("File type not found");
+            throw new RuntimeException("File type not found");
         }
         fileTypeRepository.delete(fileType);
+        return new RestResponse<>(200, null, "File type " + fileType.getType() + "is deleted successfully", null);
     }
 
 }
