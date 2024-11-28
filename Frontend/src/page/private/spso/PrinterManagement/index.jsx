@@ -2,8 +2,9 @@ import { useState, useEffect, useContext } from "react";
 import { flushSync } from "react-dom";
 import { Table, Pagination, Button, Modal, Form, Input, Tooltip } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { getAllPrinters, createNewPrinter, updatePrinter, deletePrinterById } from "../../../../api/spso";
+import { createNewPrinter, updatePrinter, deletePrinterById } from "../../../../api/spso";
 import { MyContext } from "../../../../config/context";
+import { getAllPrinters } from "./../../../../api/printer";
 
 const { TextArea } = Input;
 

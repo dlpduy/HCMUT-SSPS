@@ -16,18 +16,13 @@ export const getAllPagePurchaseHistory = ({page,size=10}) => {
 export const getStatistic = () => {
     return methods.get(`${url1}/statistic`);
 }
-export const getAllPrinters = ({page,size=10}) => {
-    return methods.get(`${url4}?page=${page}&size=${size}`);
-}
 export const createNewPrinter = (data) => {
     return methods.post(`${url4}`,JSON.stringify(data));
 }
 export const updatePrinter = (data) => {
     return methods.put(`${url4}/${data.id}`,JSON.stringify(data));
 }
-export const getPrinterById = (id) => {
-    return methods.get(`${url4}/${id}`);
-}
+
 export const deletePrinterById = (id) => {
     return methods.delete(`${url4}/${id}`);
 }
