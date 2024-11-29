@@ -1,8 +1,9 @@
 import { useState, useEffect, useContext } from "react";
-import { Form, Input, InputNumber, Button, Table } from "antd";
+import { Form, Input, InputNumber, Button, Tooltip, Table } from "antd";
 import { getAllFileTypes, getAllPaper } from "../../../../api/shared";
-import { createNewPaper, addNewFileType } from "../../../../api/spso";
+import { createNewPaper, addNewFileType, deleteFileType, deletePaper } from "../../../../api/spso";
 import { MyContext } from "../../../../config/context";
+import { DeleteOutlined } from "@ant-design/icons";
 
 const ConfigSystem = () => {
   const [fileForm] = Form.useForm();
@@ -45,6 +46,23 @@ const ConfigSystem = () => {
       title: "Giá",
       dataIndex: "price",
     },
+    {
+      title: "Hành động",
+      dataIndex: "id",
+      render: (values) => (
+        <Tooltip placement="top" title={"Xóa loại giấy này"}>
+          <Button
+            icon={<DeleteOutlined />}
+            onClick={() => {
+              deletePaper(values).then(() => {
+                openNotification("Xóa thành công", "success");
+                setGetPaper(false);
+              });
+            }}
+          />
+        </Tooltip>
+      ),
+    },
   ];
 
   const colum2 = [
@@ -55,6 +73,23 @@ const ConfigSystem = () => {
     {
       title: "Mô tả",
       dataIndex: "description",
+    },
+    {
+      title: "Hành động",
+      dataIndex: "id",
+      render: (values) => (
+        <Tooltip placement="top" title={"Xóa loại file này"}>
+          <Button
+            icon={<DeleteOutlined />}
+            onClick={() => {
+              deleteFileType(values).then(() => {
+                openNotification("Xóa thành công", "success");
+                setGetFile(false);
+              });
+            }}
+          />
+        </Tooltip>
+      ),
     },
   ];
 
