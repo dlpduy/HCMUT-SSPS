@@ -10,7 +10,7 @@ import { MyContext } from "../../config/context";
 const HeaderItems = (role) => {
   if (role?.role == "student")
     return (
-      <div className="self-center mx-auto grid grid-cols-4 grid-rows-1 gap-4">
+      <div className="self-center mx-auto grid grid-cols-5 grid-rows-1 gap-4">
         <Link className="text-[#0022FF] text-base font-bold" to="/main">
           Trang chủ
         </Link>
@@ -19,6 +19,9 @@ const HeaderItems = (role) => {
         </Link>
         <Link className="text-[#0022FF] text-base font-bold" to="/student/purchase-paper">
           Mua giấy in
+        </Link>
+        <Link className="text-[#0022FF] text-base font-bold" to="/student/purchase-paper-history">
+          Lịch sử mua giấy in
         </Link>
         <Link className="text-[#0022FF] text-base font-bold" to="/student/printing-history">
           Xem lịch sử

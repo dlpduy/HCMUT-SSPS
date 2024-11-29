@@ -1,62 +1,74 @@
-import { Table } from "antd";
+import { useState, useEffect, useContext } from "react";
+import { getFilesUploaded, uploadFiled } from "./../../../../../api/student";
+import { Table, Spin } from "antd";
+import { MyContext } from "./../../../../../config/context/index";
 
 const ChooseDocument = () => {
+  const { notification } = useContext(MyContext);
+
+  const [fileList, setFileList] = useState([]);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [inProgress, setInProgress] = useState(false);
+
+  useEffect(() => {
+    getFilesUploaded().then((res) => setFileList(res.data));
+  }, []);
+
   // Định nghĩa cột cho bảng
   const columns = [
     {
+      title: "Mã tìa liệu",
+      dataIndex: "fileId",
+      width: "10%",
+    },
+    {
       title: "Tên tài liệu",
-      dataIndex: "docName",
-      key: "docName",
+      dataIndex: "fileName",
+      width: "70%",
     },
     {
-      title: "Chỉnh sửa lần cuối",
-      dataIndex: "lastEdited",
-      key: "lastEdited",
-    },
-    {
-      title: "Kích thước tệp",
-      dataIndex: "fileSize",
-      key: "fileSize",
+      title: "Loại tài liệu",
+      dataIndex: "fileType",
+      width: "20%",
     },
   ];
 
-  // Dữ liệu giả
-  const data = [
-    {
-      docName: "Đề cương môn Toán Cao cấp",
-      lastEdited: "25-10-2024",
-      fileSize: "1.2 MB",
-    },
-    {
-      docName: "Tổng hợp lý thuyết môn Xác suất Thống kê",
-      lastEdited: "15-10-2024",
-      fileSize: "950 KB",
-    },
-    {
-      docName: "Đề thi mẫu môn Vật lý 1",
-      lastEdited: "10-10-2024",
-      fileSize: "1.8 MB",
-    },
-    {
-      docName: "Lý thuyết Thí nghiệm Vật lý",
-      lastEdited: "05-10-2024",
-      fileSize: "1.1 MB",
-    },
-    {
-      docName: "Đề cương ôn tập Đại số Tuyến tính",
-      lastEdited: "2024-11-20",
-      fileSize: "2.5 MB",
-    },
-  ];
+  const handleUpload = () => {
+    setInProgress(true);
+    const lastDotIndex = selectedFile.name.lastIndexOf(".");
+    if (lastDotIndex === -1) {
+      return { nameName: selectedFile.name, fileType: "" };
+    }
+
+    const fileName = selectedFile.name.substring(0, lastDotIndex);
+    const fileType = selectedFile.name.substring(lastDotIndex);
+    uploadFiled({ fileName, fileType }).then(() => notification("Upload file thành công!", "success"));
+    setSelectedFile();
+  };
+
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
 
   return (
-    <div className="p-4 bg-lightblue min-h-screen">
-      <h2 className="text-darkblue text-xl font-bold mb-4" style={{ paddingTop: "150px", paddingLeft: "150px" }}>
-        Chọn tài liệu
-      </h2>
-      <div style={{ display: "grid", placeItems: "center", paddingTop: "5px" }}>
-        <Table columns={columns} dataSource={data} pagination={{ pageSize: 5 }} className="bg-white rounded shadow-lg" style={{ width: "80%" }} />
+    <div className="w-full h-full bg-white pt-5 px-5 flex flex-col gap-5">
+      <h2 className="w-1/2 border-b border-slate-400 pb-3 text-2xl font-bold text-darkblue">Chọn tài liệu</h2>
+      <div className="py-5 flex flex-row w-full">
+        <label htmlFor="fileInput" className="cursor-pointer bg-darkblue !text-white py-2 px-4 rounded mr-5">
+          Thêm file mới
+        </label>
+        <input id="fileInput" type="file" className="!hidden" onChange={handleFileChange} />
+        {selectedFile && <p> {selectedFile.name}</p>}
+        <button
+          type="button"
+          className="cursor-pointer bg-white !text-lightblue py-2 px-4 rounded disabled:cursor-not-allowed"
+          disabled={selectedFile == null ? true : false}
+          onClick={handleUpload}
+        >
+          {inProgress ? <Spin /> : "Upload"}
+        </button>
       </div>
+      <Table columns={columns} dataSource={fileList} pagination={{ pageSize: 10 }} />
     </div>
   );
 };

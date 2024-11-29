@@ -1,61 +1,73 @@
-
-import { Table } from "antd";
-
-// Định nghĩa cột dữ liệu
-const columns = [
-  {
-    title: "ID",
-    dataIndex: "id",
-    key: "id",
-    render: (text) => <strong>{text}</strong>,
-  },
-  {
-    title: "Tên thương hiệu",
-    dataIndex: "brand",
-    key: "brand",
-  },
-  {
-    title: "Mẫu mã",
-    dataIndex: "model",
-    key: "model",
-  },
-  {
-    title: "Địa điểm lắp đặt",
-    dataIndex: "location",
-    key: "location",
-  },
-];
-
-// Dữ liệu máy in mẫu
-const data = [
-  {
-    key: "1",
-    id: "P001",
-    brand: "Canon",
-    model: "PIXMA G2020",
-    location: "Thư viện H1",
-  },
-  {
-    key: "2",
-    id: "P002",
-    brand: "HP",
-    model: "LaserJet Pro M404dn",
-    location: "Phòng IT",
-  },
-  {
-    key: "3",
-    id: "P003",
-    brand: "Epson",
-    model: "EcoTank L3150",
-    location: "Phòng giáo vụ",
-  },
-];
+import { useState, useEffect } from "react";
+import { getAllPrinters } from "../../../../../api/shared";
+import { Table, Pagination } from "antd";
 
 const ChoosePrinter = () => {
+  const [printerList, setPrinterList] = useState([]);
+  const [page, setPage] = useState(0);
+
+  useEffect(() => {
+    getAllPrinters({ page: page }).then((res) => {
+      setPrinterList(res.data);
+    });
+  }, [page]);
+
+  // Định nghĩa cột dữ liệu
+  const columns = [
+    {
+      title: "ID",
+      dataIndex: "id",
+      width: "5%",
+    },
+    {
+      title: "Tên thương hiệu",
+      dataIndex: "brand",
+      width: "10%",
+    },
+    {
+      title: "Mẫu mã",
+      dataIndex: "model",
+      width: "15%",
+    },
+    {
+      title: "Mô tả ngắn",
+      dataIndex: "description",
+      width: "40%",
+      render: (text) => <span style={{ whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden" }}>{text}</span>,
+    },
+    {
+      title: "Cơ sở",
+      dataIndex: "campusName",
+      width: "10%",
+    },
+    {
+      title: "Vị trí",
+      dataIndex: "buildingName",
+      width: "10%",
+    },
+    {
+      title: "Phòng",
+      dataIndex: "roomNum",
+      width: "10%",
+    },
+  ];
+
+  const handlePageChange = (e) => {
+    setPage(e);
+  };
+
   return (
-    <div>
-      <h2>Danh sách máy in</h2>
-      <Table columns={columns} dataSource={data} />
+    <div className="w-full h-full bg-white pt-5 px-5 flex flex-col gap-5">
+      <h2 className="w-1/2 border-b border-slate-400 pb-3 text-2xl font-bold text-darkblue">Danh sách máy in</h2>
+      <Table columns={columns} dataSource={printerList?.content} pagination={false} />
+      <Pagination
+        defaultCurrent={1}
+        total={printerList?.total || 0}
+        current={page + 1}
+        pageSize={printerList?.pageSize || 10}
+        onChange={handlePageChange}
+        className="self-end"
+      />
     </div>
   );
 };

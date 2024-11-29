@@ -4,7 +4,7 @@ const url1 = "spso"
 const url2 = url1 + "/print"
 const url3 = url1 + "/page"
 const url4 = url1 + "/printer"
-// const url5 = url1 + "/filetype"
+const url5 = url1 + "/filetype"
 const url6 = url1 + "/paper"
 
 export const getAllPrintingHistory = ({page,size=10}) => {
@@ -40,4 +40,10 @@ export const getPaper = (id) => {
 }
 export const deletePaper = (id) => {
     return methods.delete(`${url6}/${id}`);
+}
+export const addNewFileType = (data) => {
+    return methods.post(`${url5}`, JSON.stringify(data));
+}
+export const deleteFileType = (id) => {
+    return methods.delete(`${url5}/${id}`);
 }

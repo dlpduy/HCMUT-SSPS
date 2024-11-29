@@ -4,7 +4,7 @@ const url1 = "student"
 const url2 = url1 + "/page"
 const url3 = url1 + "/pages-history"
 const url4 = url1 + "/print"
-const url5 = url1 + "/files"
+const url5 = url1 + "/file"
 export const getPageLeft = () => {
     return methods.get(`${url2}`);
 }
@@ -22,5 +22,9 @@ export const getPrintHistory = () => {
 }
 
 export const getFilesUploaded = () => {
-    return methods.get(`${url5}`);
+    return methods.get(`${url5}s`);
+}
+
+export const uploadFiled = (data) => {
+    return methods.post(`${url5}`, JSON.stringify(data));
 }

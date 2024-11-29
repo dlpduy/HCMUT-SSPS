@@ -1,79 +1,66 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SearchOutlined } from "@ant-design/icons";
+import { getPrintHistory } from "../../../../api/student";
 import { Input, Table } from "antd";
 
 const { Search } = Input;
 
 const PrintingHistory = () => {
+  const [printHistoryList, setPrintHistoryList] = useState([]);
+
+  useEffect(() => {
+    getPrintHistory().then((res) => setPrintHistoryList(res.data));
+  }, []);
+
   const [setSearchText] = useState("");
-
-  const dataSource = [
-    {
-      key: "1",
-      studentName: "Nguyễn Văn A",
-      studentId: "0000001",
-      documentName: "Tài liệu ôn thi cuối kỳ",
-      printerId: "ABCXYZ123",
-      date: "27/10/2024",
-      quantity: 2,
-      cost: "30,000",
-    },
-    {
-      key: "2",
-      studentName: "Nguyễn Văn A",
-      studentId: "0000001",
-      documentName: "Tài liệu ôn thi cuối kỳ",
-      printerId: "ABCXYZ123",
-      date: "27/10/2024",
-      quantity: 2,
-      cost: "30,000",
-    },
-  ];
-
-  const [tableData, setTableData] = useState(dataSource);
 
   const columns = [
     {
-      title: "Tên sinh viên",
-      dataIndex: "studentName",
-      key: "studentName",
-    },
-    {
-      title: "Mã số sinh viên",
-      dataIndex: "studentId",
-      key: "studentId",
+      title: "Mã máy in",
+      dataIndex: "printerId",
+      width: "10%",
     },
     {
       title: "Tên tài liệu",
-      dataIndex: "documentName",
-      key: "documentName",
+      dataIndex: null,
+      render: (value) => value.fileName + value.fileType,
+      width: "20%",
     },
     {
-      title: "Mã máy in",
-      dataIndex: "printerId",
-      key: "printerId",
+      title: "Trang được in",
+      dataIndex: "printingPages",
+      width: "10%",
+    },
+    {
+      title: "Loại giấy in",
+      dataIndex: "paperType",
+      width: "10%",
     },
     {
       title: "Ngày in",
-      dataIndex: "date",
-      key: "date",
+      dataIndex: "time",
+      render: (value) => {
+        const date = new Date(value);
+        return `${String(date.getHours())}:${String(date.getMinutes())} ${String(date.getDate())} - ${String(date.getMonth() + 1)} - ${date.getFullYear()}`;
+      },
+      width: "20%",
     },
     {
-      title: "Số lượng đã in",
-      dataIndex: "quantity",
-      key: "quantity",
+      title: "Số lượng bản in",
+      dataIndex: "numCopy",
+      width: "10%",
     },
     {
-      title: "Giá tiền",
-      dataIndex: "cost",
-      key: "cost",
+      title: "Cấu hình in",
+      dataIndex: "sided",
+      width: "10%",
+    },
+    {
+      title: "Số lượng trang tài liệu",
+      dataIndex: "numPages",
+      width: "10%",
     },
   ];
-
-  const onSearch = (value) => {
-    const filtered = dataSource.filter((item) => Object.values(item).some((field) => String(field).toLowerCase().includes(value.toLowerCase())));
-    setTableData(filtered);
-  };
 
   return (
     <div className="w-full h-full bg-white pt-5 px-5">
@@ -83,10 +70,10 @@ const PrintingHistory = () => {
         placeholder="Search..."
         prefix={<SearchOutlined style={{ color: "#1890ff" }} />}
         style={{ width: 400, borderRadius: "8px" }}
-        onSearch={onSearch}
+        // onSearch={onSearch}
         onChange={(e) => setSearchText(e.target.value)}
       />
-      <Table dataSource={tableData} columns={columns} />
+      <Table dataSource={printHistoryList} columns={columns} />
     </div>
   );
 };

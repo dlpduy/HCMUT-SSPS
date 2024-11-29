@@ -12,11 +12,6 @@ const StudentPrintingHistory = () => {
 
   const columns = [
     {
-      title: "Mã số sinh viên",
-      dataIndex: "studentId",
-      width: "10%",
-    },
-    {
       title: "Mã máy in",
       dataIndex: "printerId",
       width: "10%",
@@ -26,6 +21,11 @@ const StudentPrintingHistory = () => {
       dataIndex: null,
       render: (value) => value.fileName + value.fileType,
       width: "20%",
+    },
+    {
+      title: "Trang được in",
+      dataIndex: "printingPages",
+      width: "10%",
     },
     {
       title: "Loại giấy in",
@@ -39,7 +39,7 @@ const StudentPrintingHistory = () => {
         const date = new Date(value);
         return `${String(date.getHours())}:${String(date.getMinutes())} ${String(date.getDate())} - ${String(date.getMonth() + 1)} - ${date.getFullYear()}`;
       },
-      width: "15%",
+      width: "20%",
     },
     {
       title: "Số lượng bản in",
@@ -47,18 +47,14 @@ const StudentPrintingHistory = () => {
       width: "10%",
     },
     {
-      title: "Số lượng trang tài liệu",
-      dataIndex: "numPages",
+      title: "Cấu hình in",
+      dataIndex: "sided",
       width: "10%",
     },
     {
-      title: "Ngày in",
-      dataIndex: "time",
-      render: (value) => {
-        const date = new Date(value);
-        return `${String(date.getDate())} - ${String(date.getMonth() + 1)} - ${date.getFullYear()}`;
-      },
-      width: "15%",
+      title: "Số lượng trang tài liệu",
+      dataIndex: "numPages",
+      width: "10%",
     },
   ];
 

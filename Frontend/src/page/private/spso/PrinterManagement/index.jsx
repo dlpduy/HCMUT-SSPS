@@ -4,7 +4,7 @@ import { Table, Pagination, Button, Modal, Form, Input, Tooltip } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { createNewPrinter, updatePrinter, deletePrinterById } from "../../../../api/spso";
 import { MyContext } from "../../../../config/context";
-import { getAllPrinters } from "./../../../../api/printer";
+import { getAllPrinters } from "./../../../../api/shared";
 
 const { TextArea } = Input;
 
