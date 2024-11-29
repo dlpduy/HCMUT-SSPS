@@ -262,9 +262,7 @@ public class PaperService {
 
         String printingPages = request.getPrintingPages();
         Long numPages = 1L;
-        if (printingPages.length() == 1)
-            numPages = 1L;
-        else if (printingPages.contains("-")) {
+        if (printingPages.contains("-")) {
             String[] parts = printingPages.split("-");
             if (parts.length != 2) {
                 throw new RuntimeException("Invalid printing pages format");
@@ -284,6 +282,12 @@ public class PaperService {
                 }
             }
             numPages = Long.valueOf(parts.length);
+        } else {
+            if (Long.parseLong(printingPages) >= 1) {
+                numPages = 1L;
+            } else {
+                throw new RuntimeException("Invalid printing pages format");
+            }
         }
         if (request.getSided().equals(PrintingLog.Sided.Double)) {
             if (numPages % 2 == 0) {
