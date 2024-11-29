@@ -19,8 +19,6 @@ public class PrintRequestDTO {
     private PrintingLog.Sided sided;
     @NotBlank(message = "Printing pages is required")
     private String printingPages;
-    @NotNull(message = "Number of pages is required")
-    private Long numPages;
     @NotNull(message = "File ID is required")
     private Long fileId;
 
@@ -38,10 +36,6 @@ public class PrintRequestDTO {
 
     public void setPrintingPages(String printingPages) {
         this.printingPages = printingPages;
-    }
-
-    public void setNumPages(Long numPages) {
-        this.numPages = numPages;
     }
 
     public void setPrinterId(Long printerId) {
