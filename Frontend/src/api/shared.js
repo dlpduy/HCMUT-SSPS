@@ -3,8 +3,13 @@ import { methods } from '../config/api/methods.config'
 const url1 = "printer"
 const url2 = "paper"
 const url3 = "payment/vn-pay-callback"
+const url4 = "filetype"
 export const getAllPrinters = ({ page, size = 10 }) => {
     return methods.get(`${url1}?page=${page}&size=${size}`);
+}
+
+export const getAllFileTypes = () => {
+    return methods.get(`${url4}`);
 }
 
 export const getPrinterById = (id) => {

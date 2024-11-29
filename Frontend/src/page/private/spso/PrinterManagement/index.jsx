@@ -184,7 +184,7 @@ const PrinterManagement = () => {
                 rules={[
                   {
                     required: true,
-                    message: "Cần phải mẫu mã!",
+                    message: "Cần phải nhập mẫu mã!",
                   },
                 ]}
               >
