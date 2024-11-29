@@ -286,7 +286,11 @@ public class PaperService {
             numPages = Long.valueOf(parts.length);
         }
         if (request.getSided().equals(PrintingLog.Sided.Double)) {
-            numPages *= 2;
+            if (numPages % 2 == 0) {
+                numPages /= 2;
+            } else {
+                numPages = numPages / 2 + 1;
+            }
         }
 
         StudentPaper studentPaper = studentPaperRepository
