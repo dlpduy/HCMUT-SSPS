@@ -14,9 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.project.SSPS.response.PaperResponse;
-import com.project.SSPS.response.ResponseObject;
 import com.project.SSPS.response.RestResponse;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -258,16 +256,52 @@ public class PaperService {
         if (!file.getStudent().getId().equals(studentId)) {
             throw new RuntimeException("File does not belong to the student");
         }
+        if (request.getPrintingPages().isEmpty() || request.getPrintingPages().length() > 100) {
+            throw new RuntimeException("Invalid printing pages format");
+        }
+
+        String printingPages = request.getPrintingPages();
+        Long numPages = 1L;
+        if (printingPages.contains("-")) {
+            String[] parts = printingPages.split("-");
+            if (parts.length != 2) {
+                throw new RuntimeException("Invalid printing pages format");
+            }
+            Long start = Long.parseLong(parts[0]);
+            Long end = Long.parseLong(parts[1]);
+            if (start > end) {
+                throw new RuntimeException("Invalid printing pages format");
+            }
+            numPages = end - start + 1;
+        } else if (printingPages.contains(",")) {
+            String[] parts = printingPages.split(",");
+            for (String part : parts) {
+                Long page = Long.parseLong(part);
+                if (page < 1) {
+                    throw new RuntimeException("Invalid printing pages format");
+                }
+            }
+            numPages = Long.valueOf(parts.length);
+        } else {
+            if (Long.parseLong(printingPages) >= 1) {
+                numPages = 1L;
+            } else {
+                throw new RuntimeException("Invalid printing pages format");
+            }
+        }
+        if (request.getSided().equals(PrintingLog.Sided.Double)) {
+            if (numPages % 2 == 0) {
+                numPages /= 2;
+            } else {
+                numPages = numPages / 2 + 1;
+            }
+        }
 
         StudentPaper studentPaper = studentPaperRepository
                 .findByStudentIdAndPaperType(studentId, request.getPaperType());
 
-        if (studentPaper == null || studentPaper.getQuantity() < request.getNumPages() * request.getNumCopy()) {
+        if (studentPaper == null || studentPaper.getQuantity() < numPages * request.getNumCopy()) {
             throw new RuntimeException("Insufficient pages available");
-        }
-
-        if (request.getPrintingPages().isEmpty() || request.getPrintingPages().length() > 100) {
-            throw new RuntimeException("Invalid printing pages format");
         }
 
         PrintingLog printingLog = new PrintingLog();
@@ -277,12 +311,12 @@ public class PaperService {
         printingLog.setNumCopy(request.getNumCopy());
         printingLog.setSided(request.getSided());
         printingLog.setPrintingPages(request.getPrintingPages());
-        printingLog.setNumPages(request.getNumPages());
+        printingLog.setNumPages(numPages);
         printingLog.setTime(LocalDateTime.now());
 
         printingLog = printingLogRepository.save(printingLog);
 
-        studentPaper.setQuantity(studentPaper.getQuantity() - request.getNumPages() * request.getNumCopy());
+        studentPaper.setQuantity(studentPaper.getQuantity() - numPages * request.getNumCopy());
         studentPaperRepository.save(studentPaper);
 
         return PrintingLogResponse.fromPrintingLog(printingLog);
