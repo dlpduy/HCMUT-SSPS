@@ -3,8 +3,8 @@ import { getFilesUploaded, uploadFiled } from "./../../../../../api/student";
 import { Table, Spin } from "antd";
 import { MyContext } from "./../../../../../config/context/index";
 
-const ChooseDocument = () => {
-  const { notification } = useContext(MyContext);
+const ChooseDocument = ({ setDataSend, setIndex, index }) => {
+  const { openNotification } = useContext(MyContext);
 
   const [fileList, setFileList] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -42,7 +42,7 @@ const ChooseDocument = () => {
 
     const fileName = selectedFile.name.substring(0, lastDotIndex);
     const fileType = selectedFile.name.substring(lastDotIndex);
-    uploadFiled({ fileName, fileType }).then(() => notification("Upload file thành công!", "success"));
+    uploadFiled({ fileName, fileType }).then(() => openNotification("Upload file thành công!", "success"));
     setSelectedFile();
   };
 
@@ -51,7 +51,7 @@ const ChooseDocument = () => {
   };
 
   return (
-    <div className="w-full h-full bg-white pt-5 px-5 flex flex-col gap-5">
+    <div className="w-full h-full flex flex-col gap-5">
       <h2 className="w-1/2 border-b border-slate-400 pb-3 text-2xl font-bold text-darkblue">Chọn tài liệu</h2>
       <div className="py-5 flex flex-row w-full">
         <label htmlFor="fileInput" className="cursor-pointer bg-darkblue !text-white py-2 px-4 rounded mr-5">
@@ -68,7 +68,19 @@ const ChooseDocument = () => {
           {inProgress ? <Spin /> : "Upload"}
         </button>
       </div>
-      <Table columns={columns} dataSource={fileList} pagination={{ pageSize: 10 }} />
+      <Table
+        columns={columns}
+        dataSource={fileList}
+        pagination={{ pageSize: 10 }}
+        onRow={(record) => {
+          return {
+            onClick: () => {
+              setDataSend((prevData) => ({ ...prevData, fileId: record.fileId }));
+              setIndex(index + 1);
+            },
+          };
+        }}
+      />
     </div>
   );
 };

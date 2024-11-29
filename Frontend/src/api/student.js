@@ -8,6 +8,9 @@ const url5 = url1 + "/file"
 export const getPageLeft = () => {
     return methods.get(`${url2}`);
 }
+export const pagePurchase = (data) => {
+    return methods.post(`${url2}/create`, JSON.stringify(data))
+}
 
 export const getPagePurchaseHistory = () => {
     return methods.get(`${url3}`);

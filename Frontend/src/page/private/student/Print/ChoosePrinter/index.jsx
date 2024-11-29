@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { getAllPrinters } from "../../../../../api/shared";
 import { Table, Pagination } from "antd";
 
-const ChoosePrinter = () => {
+const ChoosePrinter = ({ setDataSend, setOpen }) => {
   const [printerList, setPrinterList] = useState([]);
   const [page, setPage] = useState(0);
 
@@ -57,9 +57,21 @@ const ChoosePrinter = () => {
   };
 
   return (
-    <div className="w-full h-full bg-white pt-5 px-5 flex flex-col gap-5">
+    <div className="w-full h-full flex flex-col gap-5">
       <h2 className="w-1/2 border-b border-slate-400 pb-3 text-2xl font-bold text-darkblue">Danh sách máy in</h2>
-      <Table columns={columns} dataSource={printerList?.content} pagination={false} />
+      <Table
+        columns={columns}
+        dataSource={printerList?.content}
+        pagination={false}
+        onRow={(record) => {
+          return {
+            onClick: () => {
+              setDataSend((prevData) => ({ ...prevData, printerId: record.id }));
+              setOpen(true);
+            },
+          };
+        }}
+      />
       <Pagination
         defaultCurrent={1}
         total={printerList?.total || 0}

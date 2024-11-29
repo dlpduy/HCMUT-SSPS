@@ -2,6 +2,7 @@ import LayoutPage from './../../layout/index';
 import Main from "../../page/public/Main";
 import Register from "../../page/public/Register";
 import Login from "../../page/public/Login";
+import Payment from '../../page/public/payment';
 
 const mainRouter = { 
   path: "",
@@ -22,6 +23,10 @@ const mainRouter = {
     {
       subPath: "login",
       Component: Login,
+    },
+    {
+      subPath: "payment-result",
+      Component: Payment,
     },
   ]
 }
