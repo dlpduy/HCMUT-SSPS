@@ -7,9 +7,13 @@ const { Search } = Input;
 
 const PrintingHistory = () => {
   const [printHistoryList, setPrintHistoryList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    getPrintHistory().then((res) => setPrintHistoryList(res.data));
+    getPrintHistory().then((res) => {
+      setPrintHistoryList(res.data);
+      setIsLoading(true);
+    });
   }, []);
 
   const [setSearchText] = useState("");
@@ -73,7 +77,7 @@ const PrintingHistory = () => {
         // onSearch={onSearch}
         onChange={(e) => setSearchText(e.target.value)}
       />
-      <Table dataSource={printHistoryList} columns={columns} />
+      <Table dataSource={printHistoryList} columns={columns} loading={!isLoading} />
     </div>
   );
 };

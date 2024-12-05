@@ -9,9 +9,13 @@ const ChooseDocument = ({ setDataSend, setIndex, index }) => {
   const [fileList, setFileList] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
   const [inProgress, setInProgress] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    getFilesUploaded().then((res) => setFileList(res.data));
+    getFilesUploaded().then((res) => {
+      setFileList(res.data);
+      setIsLoading(true);
+    });
   }, []);
 
   // Định nghĩa cột cho bảng
@@ -72,6 +76,7 @@ const ChooseDocument = ({ setDataSend, setIndex, index }) => {
         columns={columns}
         dataSource={fileList}
         pagination={{ pageSize: 10 }}
+        loading={!isLoading}
         onRow={(record) => {
           return {
             onClick: () => {

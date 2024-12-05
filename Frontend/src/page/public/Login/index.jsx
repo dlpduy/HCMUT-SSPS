@@ -17,7 +17,7 @@ const Login = () => {
     login(values).then((res) => {
       if (res.message == "Login successfully") {
         flushSync(() => {
-          Cookies.set("name", res.data.user.name, {
+          Cookies.set("name", res.data.user.fullName, {
             path: "/",
           });
           Cookies.set("role", res.data.user.role, {
@@ -26,8 +26,8 @@ const Login = () => {
           Cookies.set("token", res.data.accessToken, {
             path: "/",
           });
+          setRole(res.data.user.role.toLowerCase());
         });
-        setRole(res.data.user.role.toLowerCase());
         openNotification(res.message, "success");
         navigate(`/main`);
       } else {
@@ -63,18 +63,18 @@ const Login = () => {
               required: true,
               message: "Please input your Username!",
             },
-            // {
-            //   validator: (_, value) => {
-            //     if (value != undefined && value != null) {
-            //       if (!/^[a-zA-Z0-9._%+-]+@hcmut\.edu\.vn$/.test(value)) {
-            //         return Promise.reject("Nhập tài khoản HCMUT của bạn!");
-            //       }
-            //       return Promise.resolve();
-            //     } else {
-            //       return Promise.reject();
-            //     }
-            //   },
-            // },
+            {
+              validator: (_, value) => {
+                if (value != undefined && value != null) {
+                  if (!/^[a-zA-Z0-9._%+-]+@hcmut\.edu\.vn$/.test(value)) {
+                    return Promise.reject("Nhập tài khoản HCMUT của bạn!");
+                  }
+                  return Promise.resolve();
+                } else {
+                  return Promise.reject();
+                }
+              },
+            },
           ]}
         >
           <Input prefix={<UserOutlined />} placeholder="Username" className="h-10" />

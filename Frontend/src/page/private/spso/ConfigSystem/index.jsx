@@ -149,7 +149,7 @@ const ConfigSystem = () => {
           </Form.Item>
         </Form>
         <div className="w-1/2 border-b border-slate-400 pb-3 text-2xl font-bold text-darkblue mb-5">Các loại file hiện tại</div>
-        <Table dataSource={fileTypeList} columns={colum2} pagination={false} />
+        <Table dataSource={fileTypeList} columns={colum2} pagination={false} loading={!getFile} />
       </div>
       <div className="flex flex-col bg-white p-5 rounded-s-lg">
         <div className="w-1/2 border-b border-slate-400 pb-3 text-2xl font-bold text-darkblue mb-5">Thông tin giấy</div>
@@ -210,7 +210,7 @@ const ConfigSystem = () => {
           </Form.Item>
         </Form>
         <div className="pb-3 text-2xl font-bold text-darkblue mb-5">Các loại giấy hiện tại</div>
-        <Table dataSource={paperTypeList} columns={colum1} pagination={false} />
+        <Table dataSource={paperTypeList} columns={colum1} pagination={false} loading={!getPaper} />
       </div>
     </div>
   );

@@ -88,7 +88,7 @@ const PaperOrder = () => {
         {/* Cột Giỏ hàng */}
         <div className="rounded-lg border p-5 bg-slate-50 bg-opacity-95 h-fit">
           <div className="w-1/2 border-b border-slate-400 pb-3 text-2xl font-bold text-darkblue">Số trang đã mua</div>
-          <Table columns={columns} dataSource={paperLeft} pagination={false} />
+          <Table columns={columns} dataSource={paperLeft} pagination={false} loading={!needReload} />
         </div>
       </div>
     </div>

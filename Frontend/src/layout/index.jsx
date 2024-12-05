@@ -19,7 +19,7 @@ const LayoutPage = () => {
     });
   };
   return (
-    <MyContext.Provider value={{ setRole, openNotification }}>
+    <MyContext.Provider value={{ setRole, openNotification, role }}>
       <Layout className="min-h-screen w-full h-screen">
         <Header className="h-16 w-full bg-[#E2E2E2]">
           <HeaderPage role={role} />

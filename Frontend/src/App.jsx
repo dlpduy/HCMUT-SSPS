@@ -3,9 +3,10 @@ import { publicRouter, privateRouter } from "./config/routes";
 import Cookies from "js-cookie";
 import "./App.css";
 
-const token = Cookies.get("token");
-const role = Cookies.get("role")?.toLowerCase();
 function App() {
+  const token = Cookies.get("token");
+  let role = Cookies.get("role") ? Cookies.get("role")?.toLowerCase() : "";
+
   return (
     <BrowserRouter
       future={{

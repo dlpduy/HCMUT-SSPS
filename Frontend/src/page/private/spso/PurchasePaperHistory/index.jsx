@@ -5,10 +5,14 @@ const PurchasePaperHistory = () => {
   // Định nghĩa cột cho bảng
 
   const [purchaseHistList, setPurchaseHistList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(0);
 
   useEffect(() => {
-    getAllPagePurchaseHistory({ page: page }).then((res) => setPurchaseHistList(res.data));
+    getAllPagePurchaseHistory({ page: page }).then((res) => {
+      setPurchaseHistList(res.data);
+      setIsLoading(true);
+    });
   }, [page]);
 
   const columns = [
@@ -60,7 +64,7 @@ const PurchasePaperHistory = () => {
   return (
     <div className="w-full h-full bg-white pt-5 px-5 flex flex-col gap-5">
       <h2 className="w-1/2 border-b border-slate-400 pb-3 text-2xl font-bold text-darkblue">Lịch sử mua giấy in</h2>
-      <Table columns={columns} dataSource={purchaseHistList.paymentLogsResponseList} pagination={false} />
+      <Table columns={columns} dataSource={purchaseHistList.paymentLogsResponseList} pagination={false} loading={!isLoading} />
       <Pagination
         defaultCurrent={1}
         total={purchaseHistList?.total || 0}

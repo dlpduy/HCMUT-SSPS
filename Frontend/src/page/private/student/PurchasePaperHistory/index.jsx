@@ -5,9 +5,13 @@ import { Table } from "antd";
 
 const PurchasePaperHistory = () => {
   const [purchaseList, setPurchaseList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    getPagePurchaseHistory().then((res) => setPurchaseList(res.data));
+    getPagePurchaseHistory().then((res) => {
+      setPurchaseList(res.data);
+      setIsLoading(true);
+    });
   }, []);
 
   // Định nghĩa cột cho bảng
@@ -55,7 +59,7 @@ const PurchasePaperHistory = () => {
   return (
     <div className="w-full h-full bg-white pt-5 px-5 flex flex-col gap-5">
       <h2 className="w-1/2 border-b border-slate-400 pb-3 text-2xl font-bold text-darkblue">Lịch sử mua giấy in</h2>
-      <Table columns={columns} dataSource={purchaseList} pagination={false} />
+      <Table columns={columns} dataSource={purchaseList} pagination={false} loading={!isLoading} />
     </div>
   );
 };

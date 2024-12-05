@@ -4,8 +4,8 @@ const url1 = "printer"
 const url2 = "paper"
 const url3 = "payment/vn-pay-callback"
 const url4 = "filetype"
-export const getAllPrinters = ({ page, size = 10 }) => {
-    return methods.get(`${url1}?page=${page}&size=${size}`);
+export const getAllPrinters = () => {
+    return methods.get(`${url1}`);
 }
 
 export const getAllFileTypes = () => {

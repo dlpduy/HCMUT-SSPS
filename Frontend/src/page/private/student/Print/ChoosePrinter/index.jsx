@@ -5,10 +5,12 @@ import { Table, Pagination } from "antd";
 const ChoosePrinter = ({ setDataSend, setOpen }) => {
   const [printerList, setPrinterList] = useState([]);
   const [page, setPage] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     getAllPrinters({ page: page }).then((res) => {
       setPrinterList(res.data);
+      setIsLoading(true);
     });
   }, [page]);
 
@@ -63,6 +65,7 @@ const ChoosePrinter = ({ setDataSend, setOpen }) => {
         columns={columns}
         dataSource={printerList?.content}
         pagination={false}
+        loading={!isLoading}
         onRow={(record) => {
           return {
             onClick: () => {

@@ -22,7 +22,7 @@ const PrinterManagement = () => {
   const [openEditModal, setOpenEditModal] = useState(false);
 
   useEffect(() => {
-    getAllPrinters({ page: page }).then((res) => {
+    getAllPrinters().then((res) => {
       setPrinterList(res.data);
       setIsNeedFetch(true);
     });
@@ -155,7 +155,7 @@ const PrinterManagement = () => {
       <Button onClick={() => setOpenAddPrinterModal(true)} className="w-52 h-12 bg-darkblue font-bold text-white text-2xl">
         Thêm máy in
       </Button>
-      <Table columns={columns} dataSource={printerList?.content} pagination={false} />
+      <Table columns={columns} dataSource={printerList?.content} pagination={false} loading={!isNeedFetch} />
       <Pagination
         defaultCurrent={1}
         total={printerList?.total || 0}

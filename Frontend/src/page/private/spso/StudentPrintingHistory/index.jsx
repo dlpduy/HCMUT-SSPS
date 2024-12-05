@@ -5,9 +5,13 @@ import { getAllPrintingHistory } from "../../../../api/spso";
 const StudentPrintingHistory = () => {
   const [printHistList, setPrintHistList] = useState([]);
   const [page, setPage] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    getAllPrintingHistory({ page: page }).then((res) => setPrintHistList(res.data));
+    getAllPrintingHistory({ page: page }).then((res) => {
+      setPrintHistList(res.data);
+      setIsLoading(true);
+    });
   }, [page]);
 
   const columns = [
@@ -64,7 +68,7 @@ const StudentPrintingHistory = () => {
   return (
     <div className="w-full h-full bg-white pt-5 px-5 flex flex-col gap-5">
       <h2 className="w-1/2 border-b border-slate-400 pb-3 text-2xl font-bold text-darkblue">Lịch sử sử dụng dịch vụ</h2>
-      <Table dataSource={printHistList?.content} columns={columns} pagination={false} />
+      <Table dataSource={printHistList?.content} columns={columns} pagination={false} loading={!isLoading} />
       <Pagination
         defaultCurrent={1}
         total={printHistList?.total || 0}
