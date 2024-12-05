@@ -5,8 +5,7 @@ import "./App.css";
 
 function App() {
   const token = Cookies.get("token");
-  let role = Cookies.get("role") ? Cookies.get("role")?.toLowerCase() : "";
-
+  const role = Cookies.get("role") ? Cookies.get("role")?.toLowerCase() : "";
   return (
     <BrowserRouter
       future={{

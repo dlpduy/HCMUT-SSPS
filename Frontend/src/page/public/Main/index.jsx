@@ -7,8 +7,8 @@ import { MyContext } from "./../../../config/context/index";
 
 const Main = () => {
   const { role } = useContext(MyContext);
-  console.log(role);
-  useEffect(() => {}, [role]);
+  useEffect(() => {
+  }, [role]);
   const navigate = useNavigate();
   return role == "student" ? (
     <div className="w-full h-full grid grid-cols-2 grid-rows-1 gap-4 p-5 ">

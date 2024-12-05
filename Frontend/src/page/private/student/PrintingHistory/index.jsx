@@ -1,9 +1,6 @@
 import { useState, useEffect } from "react";
-import { SearchOutlined } from "@ant-design/icons";
 import { getPrintHistory } from "../../../../api/student";
-import { Input, Table } from "antd";
-
-const { Search } = Input;
+import { Table } from "antd";
 
 const PrintingHistory = () => {
   const [printHistoryList, setPrintHistoryList] = useState([]);
@@ -15,8 +12,6 @@ const PrintingHistory = () => {
       setIsLoading(true);
     });
   }, []);
-
-  const [setSearchText] = useState("");
 
   const columns = [
     {
@@ -69,14 +64,6 @@ const PrintingHistory = () => {
   return (
     <div className="w-full h-full bg-white pt-5 px-5">
       <h2 className="w-1/2 border-b border-slate-400 mb-5 pb-3 text-2xl font-bold text-darkblue">Lịch sử sử dụng dịch vụ</h2>
-      <Search
-        size="large"
-        placeholder="Search..."
-        prefix={<SearchOutlined style={{ color: "#1890ff" }} />}
-        style={{ width: 400, borderRadius: "8px" }}
-        // onSearch={onSearch}
-        onChange={(e) => setSearchText(e.target.value)}
-      />
       <Table dataSource={printHistoryList} columns={columns} loading={!isLoading} />
     </div>
   );

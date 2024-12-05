@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { Form, Input, Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import { flushSync } from "react-dom";
@@ -11,7 +11,11 @@ import printer from "../../../assets/img/main.png";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { setRole, openNotification } = useContext(MyContext);
+  const { setRole, openNotification, role } = useContext(MyContext);
+
+  useEffect(() => {
+    if (role === "spso" || role === "student") navigate("/main");
+  }, [role]);
 
   const handleLogin = (values) => {
     login(values).then((res) => {
@@ -30,6 +34,7 @@ const Login = () => {
         });
         openNotification(res.message, "success");
         navigate(`/main`);
+        location.reload();
       } else {
         openNotification(res.message, "error");
       }
@@ -110,17 +115,14 @@ const Login = () => {
         >
           <Input.Password prefix={<LockOutlined />} type="password" placeholder="Password" className="h-10" />
         </Form.Item>
-        <div className="w-full h-fit flex flex-row items-center justify-between">
-          <Form.Item className="mb-0 w-full">
-            <Button
-              htmlType="submit"
-              className="w-full h-10 text-lg bg-lightblue text-white font-extrabold font-sans hover:!border-0 hover:!bg-darkblue hover:!text-white"
-            >
-              Đăng nhập
-            </Button>
-          </Form.Item>
-          <Button className="border-none bg-transparent hover:!bg-transparent hover:!text-lightblue shadow-none">Forgot password?</Button>
-        </div>
+        <Form.Item className="mb-0 w-full">
+          <Button
+            htmlType="submit"
+            className="w-full h-10 text-lg bg-lightblue text-white font-extrabold font-sans hover:!border-0 hover:!bg-darkblue hover:!text-white"
+          >
+            Đăng nhập
+          </Button>
+        </Form.Item>
         <div className="flex items-center justify-between w-full pt-5">
           <div className="text-gray-600">{`Don't have an account?`}</div>
           <Button

@@ -56,9 +56,9 @@ const HeaderItems = (role) => {
       <Link className="text-[#0022FF] text-base font-bold" to="/main">
         Trang chủ
       </Link>
-      <Link className="text-[#0022FF] text-base font-bold" to="/main">
+      {/* <Link className="text-[#0022FF] text-base font-bold" to="/main">
         Liên hệ
-      </Link>
+      </Link> */}
     </div>
   );
 };

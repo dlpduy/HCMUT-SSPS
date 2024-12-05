@@ -24,16 +24,12 @@ const PaperOrder = () => {
 
   const columns = [
     {
-      title: <div className="text-darkblue">Khổ giấy</div>,
-      dataIndex: "size",
+      title: <div className="text-darkblue">Loại giấy</div>,
+      dataIndex: "paperType",
     },
     {
       title: <div className="text-darkblue">Số lượng</div>,
       dataIndex: "quantity",
-    },
-    {
-      title: <div className="text-darkblue">Thành tiền (VND)</div>,
-      dataIndex: "price",
     },
   ];
   const handleBuyPaper = (values) => {

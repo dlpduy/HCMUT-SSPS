@@ -21,13 +21,26 @@ const Print = () => {
     printerId: "Chưa được chọn",
   });
   const handleCreatePrint = () => {
-    createPrintService(dataSend).then((res) => {
-      if (res.error) openNotification(res.error, "error");
-      else {
-        openNotification("Yêu cầu in của bạn đã được gửi!", " success");
-        setOpen(false);
-      }
-    });
+    createPrintService(dataSend)
+      .then((res) => {
+        if (res.error) {
+          openNotification(res.error, "error");
+          setOpen(false);
+        } else {
+          openNotification("Yêu cầu in của bạn đã được gửi!", "success");
+          setOpen(false);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+        if (e.response?.data.error) {
+          openNotification(e?.response?.data?.error, "error");
+          setOpen(false);
+        } else {
+          openNotification("Yêu cầu in của bạn đã được gửi!", "success");
+          setOpen(false);
+        }
+      });
   };
   const component = [
     <ChooseDocument setDataSend={setDataSend} setIndex={setIndex} index={index} key={0} />,
