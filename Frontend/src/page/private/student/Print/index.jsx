@@ -20,14 +20,23 @@ const Print = () => {
     printingPages: "1",
     printerId: "Chưa được chọn",
   });
-  const handleCreatePrint = () => {
-    createPrintService(dataSend).then((res) => {
-      if (res.error) openNotification(res.error, "error");
-      else {
-        openNotification("Yêu cầu in của bạn đã được gửi!", " success");
+  const handleCreatePrint = async () => {
+    try {
+      const res = await createPrintService(dataSend);
+      if (res.error) {
+        openNotification(res.error, "error");
+      } else {
+        openNotification("Yêu cầu in của bạn đã được gửi!", "success");
         setOpen(false);
       }
-    });
+    } catch (error) {
+      console.error('Đã xảy ra lỗi:', error);
+      if (error instanceof Error) {
+        openNotification(`Lỗi: ${error.response.data.error}`, 'error');
+      } else {
+        openNotification('Đã xảy ra lỗi không xác định. Vui lòng thử lại!', 'error');
+      }
+    }
   };
   const component = [
     <ChooseDocument setDataSend={setDataSend} setIndex={setIndex} index={index} key={0} />,
