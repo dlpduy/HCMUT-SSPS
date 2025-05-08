@@ -1,7 +1,7 @@
 import LayoutPage from './../../layout/index';
 import PurchasePaper from '../../page/private/student/PurchasePaper/index';
 import PurchasePaperHistory from './../../page/private/student/PurchasePaperHistory/index';
-import Payment from './../../page/private/student/Payment/index';
+import Payment from './../../page/private/student/payment/index';
 import Print from './../../page/private/student/Print/index';
 import PrintingHistory from './../../page/private/student/PrintingHistory/index';
 
